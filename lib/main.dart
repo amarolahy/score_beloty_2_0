@@ -7,7 +7,6 @@ import 'app/router.dart';
 import 'app/theme.dart';
 import 'features/game/application/game_providers.dart';
 import 'features/settings/application/locale_providers.dart';
-import 'l10n/generated/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +36,7 @@ class ScoreBelotyApp extends ConsumerWidget {
       darkTheme: AppTheme.dark(),
       routerConfig: router,
       locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: appLocalizationsDelegates,
       supportedLocales: supportedLocales,
       debugShowCheckedModeBanner: false,
     );

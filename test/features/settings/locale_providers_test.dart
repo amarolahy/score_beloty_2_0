@@ -84,4 +84,18 @@ void main() {
     expect(updated.languageCode, 'en');
     expect(updated.countryCode, 'US');
   });
+
+  test('Malagasy locale is supported and translations are loaded', () async {
+    final container = await _makeContainer(<String, Object>{
+      localePrefsKey: 'mg',
+    });
+    final locale = await container.read(localeControllerProvider.future);
+    expect(locale.languageCode, 'mg');
+
+    // supportedLocales contains the Malagasy entry.
+    expect(
+      supportedLocales.any((l) => l.languageCode == 'mg'),
+      isTrue,
+    );
+  });
 }

@@ -122,6 +122,7 @@ class _LanguageSelector extends ConsumerWidget {
   static const Map<String, Locale> _locales = {
     'FR': Locale('fr'),
     'EN': Locale('en'),
+    'MG': Locale('mg'),
   };
 
   @override
