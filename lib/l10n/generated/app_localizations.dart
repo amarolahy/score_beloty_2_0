@@ -232,11 +232,11 @@ abstract class AppLocalizations {
   /// **'Partage autorisé (SA)'**
   String get ruleSplitNoTrumps;
 
-  /// No description provided for @ruleSplitColor.
+  /// No description provided for @ruleSplitSuit.
   ///
   /// In fr, this message translates to:
   /// **'Partage autorisé (Couleur)'**
-  String get ruleSplitColor;
+  String get ruleSplitSuit;
 
   /// No description provided for @ruleContinueOnTie.
   ///
@@ -262,11 +262,11 @@ abstract class AppLocalizations {
   /// **'Points attribués sur erreur'**
   String get rulePointOnError;
 
-  /// No description provided for @ruleWinIfCapotInside.
+  /// No description provided for @ruleWinIfCapotByDefense.
   ///
   /// In fr, this message translates to:
-  /// **'Gagner si capot dedans'**
-  String get ruleWinIfCapotInside;
+  /// **'Gagner si capot par la défense'**
+  String get ruleWinIfCapotByDefense;
 
   /// No description provided for @ruleRedoubleNoTrumps.
   ///
@@ -274,23 +274,23 @@ abstract class AppLocalizations {
   /// **'Surcontré sans atout'**
   String get ruleRedoubleNoTrumps;
 
-  /// No description provided for @ruleBet.
+  /// No description provided for @ruleStake.
   ///
   /// In fr, this message translates to:
   /// **'Système de goûter activé'**
-  String get ruleBet;
+  String get ruleStake;
 
-  /// No description provided for @ruleBetAmount.
+  /// No description provided for @ruleStakeAmount.
   ///
   /// In fr, this message translates to:
   /// **'Mise (Ar)'**
-  String get ruleBetAmount;
+  String get ruleStakeAmount;
 
-  /// No description provided for @ruleDoubleAmountOnCapotScore.
+  /// No description provided for @ruleStakeDoubledOnCapot.
   ///
   /// In fr, this message translates to:
   /// **'Doubler la mise sur capot'**
-  String get ruleDoubleAmountOnCapotScore;
+  String get ruleStakeDoubledOnCapot;
 
   /// No description provided for @contractLabel.
   ///
@@ -424,11 +424,11 @@ abstract class AppLocalizations {
   /// **'Capot'**
   String get capotCapot;
 
-  /// No description provided for @capotInside.
+  /// No description provided for @capotByDefense.
   ///
   /// In fr, this message translates to:
-  /// **'Dedans'**
-  String get capotInside;
+  /// **'Capot défense'**
+  String get capotByDefense;
 
   /// No description provided for @calculatedStake.
   ///
@@ -526,11 +526,11 @@ abstract class AppLocalizations {
   /// **'Partage'**
   String get splitResult;
 
-  /// No description provided for @litigation.
+  /// No description provided for @dispute.
   ///
   /// In fr, this message translates to:
   /// **'Litige'**
-  String get litigation;
+  String get dispute;
 
   /// No description provided for @splitSubtitle.
   ///
@@ -538,11 +538,11 @@ abstract class AppLocalizations {
   /// **'Saisir les scores manuellement'**
   String get splitSubtitle;
 
-  /// No description provided for @litigationSubtitle.
+  /// No description provided for @disputeSubtitle.
   ///
   /// In fr, this message translates to:
   /// **'Chaque camp conserve ses points'**
-  String get litigationSubtitle;
+  String get disputeSubtitle;
 
   /// No description provided for @noCurrentDeal.
   ///
@@ -664,11 +664,11 @@ abstract class AppLocalizations {
   /// **'Partage'**
   String get resultSplit;
 
-  /// No description provided for @resultLitigation.
+  /// No description provided for @resultDispute.
   ///
   /// In fr, this message translates to:
   /// **'Litige'**
-  String get resultLitigation;
+  String get resultDispute;
 
   /// No description provided for @resultPending.
   ///
@@ -760,11 +760,11 @@ abstract class AppLocalizations {
   /// **'Non'**
   String get noLabel;
 
-  /// No description provided for @betAmountLabel.
+  /// No description provided for @stakeAmountLabel.
   ///
   /// In fr, this message translates to:
   /// **'Oui ({amount} Ar)'**
-  String betAmountLabel(int amount);
+  String stakeAmountLabel(int amount);
 
   /// No description provided for @gameOverTitle.
   ///

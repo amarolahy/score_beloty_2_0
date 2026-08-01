@@ -152,8 +152,8 @@ class _DealsList extends StatelessWidget {
         return l10n.capotNone;
       case CapotType.capot:
         return l10n.capotCapot;
-      case CapotType.capotInside:
-        return l10n.capotInside;
+      case CapotType.capotByDefense:
+        return l10n.capotByDefense;
     }
   }
 
@@ -165,8 +165,8 @@ class _DealsList extends StatelessWidget {
         return l10n.resultLost;
       case ResultType.split:
         return l10n.resultSplit;
-      case ResultType.litigation:
-        return l10n.resultLitigation;
+      case ResultType.dispute:
+        return l10n.resultDispute;
       case null:
         return l10n.resultPending;
     }
@@ -203,7 +203,7 @@ class _DealAvatar extends StatelessWidget {
         return Colors.red.shade700;
       case ResultType.split:
         return Colors.orange.shade700;
-      case ResultType.litigation:
+      case ResultType.dispute:
         return Colors.blueGrey;
       case null:
         return Colors.grey;

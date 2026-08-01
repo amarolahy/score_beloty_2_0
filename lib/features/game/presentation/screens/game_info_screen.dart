@@ -66,17 +66,17 @@ class GameInfoScreen extends ConsumerWidget {
               value: game.rules.splitNoTrumps ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
-              label: l10n.ruleSplitColor,
-              value: game.rules.splitColor ? l10n.yesLabel : l10n.noLabel,
+              label: l10n.ruleSplitSuit,
+              value: game.rules.splitSuit ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
               label: l10n.ruleContinueOnTie,
               value: game.rules.continueOnTie ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
-              label: l10n.ruleBet,
-              value: game.rules.bet
-                  ? l10n.betAmountLabel(game.rules.betAmount)
+              label: l10n.ruleStake,
+              value: game.rules.stake
+                  ? l10n.stakeAmountLabel(game.rules.stakeAmount)
                   : l10n.noLabel,
             ),
           ],

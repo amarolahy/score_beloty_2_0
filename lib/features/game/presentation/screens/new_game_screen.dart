@@ -266,9 +266,9 @@ class _RulesEditor extends StatelessWidget {
             onChanged: (v) => onChanged(rules.copyWith(splitNoTrumps: v)),
           ),
           SwitchListTile(
-            title: Text(l10n.ruleSplitColor),
-            value: rules.splitColor,
-            onChanged: (v) => onChanged(rules.copyWith(splitColor: v)),
+            title: Text(l10n.ruleSplitSuit),
+            value: rules.splitSuit,
+            onChanged: (v) => onChanged(rules.copyWith(splitSuit: v)),
           ),
           SwitchListTile(
             title: Text(l10n.ruleContinueOnTie),
@@ -291,9 +291,10 @@ class _RulesEditor extends StatelessWidget {
             onChanged: (v) => onChanged(rules.copyWith(pointOnError: v)),
           ),
           SwitchListTile(
-            title: Text(l10n.ruleWinIfCapotInside),
-            value: rules.winIfCapotInside,
-            onChanged: (v) => onChanged(rules.copyWith(winIfCapotInside: v)),
+            title: Text(l10n.ruleWinIfCapotByDefense),
+            value: rules.winIfCapotByDefense,
+            onChanged: (v) =>
+                onChanged(rules.copyWith(winIfCapotByDefense: v)),
           ),
           SwitchListTile(
             title: Text(l10n.ruleRedoubleNoTrumps),
@@ -301,21 +302,21 @@ class _RulesEditor extends StatelessWidget {
             onChanged: (v) => onChanged(rules.copyWith(redoubleNoTrumps: v)),
           ),
           SwitchListTile(
-            title: Text(l10n.ruleBet),
-            value: rules.bet,
-            onChanged: (v) => onChanged(rules.copyWith(bet: v)),
+            title: Text(l10n.ruleStake),
+            value: rules.stake,
+            onChanged: (v) => onChanged(rules.copyWith(stake: v)),
           ),
-          if (rules.bet) ...[
+          if (rules.stake) ...[
             _NumberField(
-              label: l10n.ruleBetAmount,
-              value: rules.betAmount,
-              onChanged: (v) => onChanged(rules.copyWith(betAmount: v)),
+              label: l10n.ruleStakeAmount,
+              value: rules.stakeAmount,
+              onChanged: (v) => onChanged(rules.copyWith(stakeAmount: v)),
             ),
             SwitchListTile(
-              title: Text(l10n.ruleDoubleAmountOnCapotScore),
-              value: rules.doubleAmountOnCapotScore,
+              title: Text(l10n.ruleStakeDoubledOnCapot),
+              value: rules.stakeDoubledOnCapot,
               onChanged: (v) => onChanged(
-                rules.copyWith(doubleAmountOnCapotScore: v),
+                rules.copyWith(stakeDoubledOnCapot: v),
               ),
             ),
           ],

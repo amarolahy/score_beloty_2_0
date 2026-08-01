@@ -164,7 +164,7 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
   Map<CapotType, String> _capotLabels(AppLocalizations l10n) => {
         CapotType.no: l10n.capotNone,
         CapotType.capot: l10n.capotCapot,
-        CapotType.capotInside: l10n.capotInside,
+        CapotType.capotByDefense: l10n.capotByDefense,
       };
 }
 
@@ -236,12 +236,12 @@ class _ScoreBanner extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              l10n.target(game.effectiveFinalScoreValue),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onPrimaryContainer,
+              Text(
+                l10n.target(game.targetScore),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -391,8 +391,8 @@ class _CapotSelector extends StatelessWidget {
           label: Text(labels[CapotType.capot]!),
         ),
         ButtonSegment(
-          value: CapotType.capotInside,
-          label: Text(labels[CapotType.capotInside]!),
+          value: CapotType.capotByDefense,
+          label: Text(labels[CapotType.capotByDefense]!),
         ),
       ],
       selected: {selected},

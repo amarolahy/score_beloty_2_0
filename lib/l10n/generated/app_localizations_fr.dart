@@ -76,7 +76,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ruleSplitNoTrumps => 'Partage autorisé (SA)';
 
   @override
-  String get ruleSplitColor => 'Partage autorisé (Couleur)';
+  String get ruleSplitSuit => 'Partage autorisé (Couleur)';
 
   @override
   String get ruleContinueOnTie => 'Miara miakatra (continuer sur égalité)';
@@ -91,19 +91,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get rulePointOnError => 'Points attribués sur erreur';
 
   @override
-  String get ruleWinIfCapotInside => 'Gagner si capot dedans';
+  String get ruleWinIfCapotByDefense => 'Gagner si capot par la défense';
 
   @override
   String get ruleRedoubleNoTrumps => 'Surcontré sans atout';
 
   @override
-  String get ruleBet => 'Système de goûter activé';
+  String get ruleStake => 'Système de goûter activé';
 
   @override
-  String get ruleBetAmount => 'Mise (Ar)';
+  String get ruleStakeAmount => 'Mise (Ar)';
 
   @override
-  String get ruleDoubleAmountOnCapotScore => 'Doubler la mise sur capot';
+  String get ruleStakeDoubledOnCapot => 'Doubler la mise sur capot';
 
   @override
   String get contractLabel => 'Contrat';
@@ -172,7 +172,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get capotCapot => 'Capot';
 
   @override
-  String get capotInside => 'Dedans';
+  String get capotByDefense => 'Capot défense';
 
   @override
   String get calculatedStake => 'Mise calculée';
@@ -228,13 +228,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get splitResult => 'Partage';
 
   @override
-  String get litigation => 'Litige';
+  String get dispute => 'Litige';
 
   @override
   String get splitSubtitle => 'Saisir les scores manuellement';
 
   @override
-  String get litigationSubtitle => 'Chaque camp conserve ses points';
+  String get disputeSubtitle => 'Chaque camp conserve ses points';
 
   @override
   String get noCurrentDeal =>
@@ -308,7 +308,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get resultSplit => 'Partage';
 
   @override
-  String get resultLitigation => 'Litige';
+  String get resultDispute => 'Litige';
 
   @override
   String get resultPending => 'En cours';
@@ -367,7 +367,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noLabel => 'Non';
 
   @override
-  String betAmountLabel(int amount) {
+  String stakeAmountLabel(int amount) {
     return 'Oui ($amount Ar)';
   }
 

@@ -33,16 +33,16 @@
   "ruleFinalScore": "Isa kendrena",
   "ruleSplitAllTrumps": "Afaka mizara (TA)",
   "ruleSplitNoTrumps": "Afaka mizara (SA)",
-  "ruleSplitColor": "Afaka mizara (Loko)",
+  "ruleSplitSuit": "Afaka mizara (Loko)",
   "ruleContinueOnTie": "Miara miakatra (tohizo raha mitovy)",
   "ruleStepsOnTie": "Fisondrotana raha mitovy",
   "rulePointIfError": "Isa raha misy fahadisoana",
   "rulePointOnError": "Isa omena amin'ny fahadisoana",
-  "ruleWinIfCapotInside": "Maharesy raha capot dedans",
+  "ruleWinIfCapotByDefense": "Maharesy raha capot par la défense",
   "ruleRedoubleNoTrumps": "Afaka miantso Sans A surcontré",
-  "ruleBet": "Asio goûter kely",
-  "ruleBetAmount": "Vola apetraka (Ar)",
-  "ruleDoubleAmountOnCapotScore": "Mandoa double raha capot",
+  "ruleStake": "Asio goûter kely",
+  "ruleStakeAmount": "Vola apetraka (Ar)",
+  "ruleStakeDoubledOnCapot": "Mandoa double raha capot",
 
   "contractLabel": "Kontratra",
   "bidLabel": "Tsenam-barotra",
@@ -69,7 +69,7 @@
 
   "capotNone": "Tsy misy",
   "capotCapot": "Capot",
-  "capotInside": "Capot Dedans",
+  "capotByDefense": "Capot par la défense",
 
   "calculatedStake": "Vola voakajy",
   "splitAllowed": "Afaka mizara",
@@ -99,9 +99,9 @@
   "win": "Naharesy isika",
   "lose": "Naharesy izy ireo",
   "splitResult": "Fizarana",
-  "litigation": "Adim-panahy",
+  "dispute": "Adim-panahy",
   "splitSubtitle": "Ampidiro ny isa amin'ny tanana",
-  "litigationSubtitle": "Ny ekipa tsirairay mitahiry ny isa avy",
+  "disputeSubtitle": "Ny ekipa tsirairay mitahiry ny isa avy",
   "noCurrentDeal": "Tsy misy donne ankehitriny. Atombohy vaovao.",
   "chooseContractButton": "Fidio kontratra",
 
@@ -153,7 +153,7 @@
   "resultWon": "Naharesy isika",
   "resultLost": "Naharesy izy ireo",
   "resultSplit": "Fizarana",
-  "resultLitigation": "Adim-panahy",
+  "resultDispute": "Adim-panahy",
   "resultPending": "Mbola ao",
   "tieTooltip": "Mitovy ampiharina (miara miakatra)",
   "dealSubtitle": "{date} • {result} • {ours} - {theirs}",
@@ -183,8 +183,8 @@
   "activeRules": "Fitsipika miasa",
   "yesLabel": "Eny",
   "noLabel": "Tsia",
-  "betAmountLabel": "Eny ({amount} Ar)",
-  "@betAmountLabel": {
+  "stakeAmountLabel": "Eny ({amount} Ar)",
+  "@stakeAmountLabel": {
     "placeholders": {
       "amount": { "type": "int" }
     }

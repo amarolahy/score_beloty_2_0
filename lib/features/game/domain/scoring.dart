@@ -4,24 +4,30 @@ import 'rules.dart';
 class ScoringEngine {
   ScoringEngine._();
 
-  static const List<int> _dedansBase = [26, 52, 16, 16, 16, 32];
-  static const List<int> _capotBase = [35, 90, 162, 162, 162, 162];
-  static const List<int> _capotInsideBase = [45, 120, 162, 162, 162, 162];
+  /// Trick points the defender earns when the bidder fails the contract.
+  /// Indexed by [ContractType] minus 1 (see the order in [ContractType]).
+  static const List<int> _trickPoints = [26, 52, 16, 16, 16, 32];
 
-  static int dedansPoints(ContractType contract) {
+  /// Total points when the bidder scores a capot.
+  static const List<int> _capotPoints = [35, 90, 162, 162, 162, 162];
+
+  /// Total points when the defense scores a capot (formerly "capot dedans").
+  static const List<int> _capotByDefensePoints = [45, 120, 162, 162, 162, 162];
+
+  static int trickPoints(ContractType contract) {
     if (contract == ContractType.error) return 0;
-    return _dedansBase[contract.index];
+    return _trickPoints[contract.index];
   }
 
   static int capotPoints(ContractType contract, Rules rules) {
     if (contract == ContractType.error) return 0;
-    return _resolve(_capotBase[contract.index], rules.finalScore);
+    return _resolve(_capotPoints[contract.index], rules.finalScore);
   }
 
-  static int capotInsidePoints(ContractType contract, Rules rules) {
+  static int capotByDefensePoints(ContractType contract, Rules rules) {
     if (contract == ContractType.error) return 0;
-    if (rules.winIfCapotInside) return rules.finalScore;
-    return _resolve(_capotInsideBase[contract.index], rules.finalScore);
+    if (rules.winIfCapotByDefense) return rules.finalScore;
+    return _resolve(_capotByDefensePoints[contract.index], rules.finalScore);
   }
 
   static int bidMultiplier(BidType bid, ContractType contract, Rules rules) {
@@ -46,11 +52,11 @@ class ScoringEngine {
   }) {
     switch (capot) {
       case CapotType.no:
-        return dedansPoints(contract);
+        return trickPoints(contract);
       case CapotType.capot:
         return capotPoints(contract, rules);
-      case CapotType.capotInside:
-        return capotInsidePoints(contract, rules);
+      case CapotType.capotByDefense:
+        return capotByDefensePoints(contract, rules);
     }
   }
 
@@ -73,7 +79,7 @@ class ScoringEngine {
       case ContractType.error:
         return false;
       default:
-        return rules.splitColor;
+        return rules.splitSuit;
     }
   }
 
@@ -116,8 +122,11 @@ class DealOutcome {
         tie: false,
       );
 
-  factory DealOutcome.litigation(int ours, int theirs) => DealOutcome(
-        result: ResultType.litigation,
+  /// Outcome when both sides disagree on the deal's score ("litige" in
+  /// French). The current total for each side is preserved; a same value
+  /// on both sides flags the deal as a tie.
+  factory DealOutcome.dispute(int ours, int theirs) => DealOutcome(
+        result: ResultType.dispute,
         ourPoints: ours,
         theirPoints: theirs,
         tie: ours == theirs,

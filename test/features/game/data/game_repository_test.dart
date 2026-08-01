@@ -142,7 +142,7 @@ void main() {
 
     test('partial corruption returns the valid games only', () async {
       final validJson =
-          '{"us":{"player1":"A","player2":"B","initialScore":0},"them":{"player1":"C","player2":"D","initialScore":0},"rules":{"finalScore":150,"splitAllTrumps":true,"splitNoTrumps":false,"splitColor":false,"continueOnTie":true,"stepsOnTie":50,"pointIfError":true,"pointOnError":10,"winIfCapotInside":false,"redoubleNoTrumps":false,"atStake":false,"bet":false,"betAmount":0,"doubleAmountOnCapotScore":true},"deals":[],"state":"begin","createdOn":"2026-01-01T00:00:00.000","effectiveFinalScore":null}';
+          '{"us":{"player1":"A","player2":"B","initialScore":0},"them":{"player1":"C","player2":"D","initialScore":0},"rules":{"finalScore":150,"splitAllTrumps":true,"splitNoTrumps":false,"splitSuit":false,"continueOnTie":true,"stepsOnTie":50,"pointIfError":true,"pointOnError":10,"winIfCapotByDefense":false,"redoubleNoTrumps":false,"stake":false,"stakeAmount":0,"stakeDoubledOnCapot":true},"deals":[],"state":"begin","createdOn":"2026-01-01T00:00:00.000","raisedTarget":null}';
       SharedPreferences.setMockInitialValues(<String, Object>{
         'games_v2': [validJson, 'not-json', 'also-broken'],
       });

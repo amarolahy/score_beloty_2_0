@@ -17,7 +17,7 @@ class Game {
     this.deals = const <Deal>[],
     this.state = GameState.begin,
     required this.createdOn,
-    this.effectiveFinalScore,
+    this.raisedTarget,
   });
 
   final Team us;
@@ -26,7 +26,10 @@ class Game {
   final List<Deal> deals;
   final GameState state;
   final DateTime createdOn;
-  final int? effectiveFinalScore;
+
+  /// Optional raised target score after a tie (miara miakatra).
+  /// When set, this value replaces [Rules.finalScore] until the game ends.
+  final int? raisedTarget;
 
   factory Game.fresh({
     required Team us,
@@ -35,7 +38,7 @@ class Game {
     List<Deal> deals = const <Deal>[],
     GameState state = GameState.begin,
     DateTime? createdOn,
-    int? effectiveFinalScore,
+    int? raisedTarget,
   }) {
     return Game(
       us: us,
@@ -44,11 +47,11 @@ class Game {
       deals: deals,
       state: state,
       createdOn: createdOn ?? DateTime.now(),
-      effectiveFinalScore: effectiveFinalScore,
+      raisedTarget: raisedTarget,
     );
   }
 
-  int get _threshold => effectiveFinalScore ?? rules.finalScore;
+  int get _currentTarget => raisedTarget ?? rules.finalScore;
 
   Deal? get currentDeal => deals.isEmpty ? null : deals.last;
 
@@ -59,7 +62,7 @@ class Game {
     return null;
   }
 
-  int get effectiveFinalScoreValue => _threshold;
+  int get targetScore => _currentTarget;
 
   int get ourScore {
     return us.initialScore +
@@ -75,11 +78,11 @@ class Game {
             .fold<int>(0, (acc, d) => acc + d.theirPoints);
   }
 
-  bool get isOver => ourScore >= _threshold || theirScore >= _threshold;
+  bool get isOver => ourScore >= _currentTarget || theirScore >= _currentTarget;
 
   Winner get winner {
     if (!isOver) return Winner.none;
-    return ourScore >= _threshold ? Winner.us : Winner.them;
+    return ourScore >= _currentTarget ? Winner.us : Winner.them;
   }
 
   Game addDeal(Deal deal) => copyWith(
@@ -93,16 +96,16 @@ class Game {
     return copyWith(
       deals: remaining,
       state: remaining.isEmpty ? GameState.begin : state,
-      resetEffectiveFinalScore: true,
+      resetRaisedTarget: true,
     );
   }
 
-  Game continueCauseTie({int? ourScoreOverride, int? theirScoreOverride}) {
+  Game continueAfterTie({int? ourScoreOverride, int? theirScoreOverride}) {
     if (!rules.continueOnTie) return this;
     final o = ourScoreOverride ?? ourScore;
     final t = theirScoreOverride ?? theirScore;
     if (o != t) return this;
-    return copyWith(effectiveFinalScore: _threshold + rules.stepsOnTie);
+    return copyWith(raisedTarget: _currentTarget + rules.stepsOnTie);
   }
 
   Game markFinishedIfNeeded() {
@@ -119,8 +122,8 @@ class Game {
     List<Deal>? deals,
     GameState? state,
     DateTime? createdOn,
-    int? effectiveFinalScore,
-    bool resetEffectiveFinalScore = false,
+    int? raisedTarget,
+    bool resetRaisedTarget = false,
   }) {
     return Game(
       us: us ?? this.us,
@@ -129,9 +132,9 @@ class Game {
       deals: deals ?? this.deals,
       state: state ?? this.state,
       createdOn: createdOn ?? this.createdOn,
-      effectiveFinalScore: resetEffectiveFinalScore
+      raisedTarget: resetRaisedTarget
           ? null
-          : (effectiveFinalScore ?? this.effectiveFinalScore),
+          : (raisedTarget ?? this.raisedTarget),
     );
   }
 
@@ -142,7 +145,7 @@ class Game {
         'deals': deals.map((d) => d.toJson()).toList(),
         'state': state.name,
         'createdOn': createdOn.toIso8601String(),
-        'effectiveFinalScore': effectiveFinalScore,
+        'raisedTarget': raisedTarget,
       };
 
   factory Game.fromJson(Map<String, dynamic> json) => Game(
@@ -155,7 +158,7 @@ class Game {
         state: GameState.values
             .byName(json['state'] as String? ?? GameState.begin.name),
         createdOn: DateTime.parse(json['createdOn'] as String),
-        effectiveFinalScore: json['effectiveFinalScore'] as int?,
+        raisedTarget: json['raisedTarget'] as int?,
       );
 
   @override
@@ -167,7 +170,7 @@ class Game {
         other.rules == rules &&
         other.state == state &&
         other.createdOn == createdOn &&
-        other.effectiveFinalScore == effectiveFinalScore &&
+        other.raisedTarget == raisedTarget &&
         _dealsEquals(other.deals, deals);
   }
 
@@ -186,7 +189,7 @@ class Game {
         rules,
         state,
         createdOn,
-        effectiveFinalScore,
+        raisedTarget,
         Object.hashAll(deals),
       );
 }

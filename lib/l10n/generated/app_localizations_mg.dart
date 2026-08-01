@@ -76,7 +76,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get ruleSplitNoTrumps => 'Afaka mizara (SA)';
 
   @override
-  String get ruleSplitColor => 'Afaka mizara (Loko)';
+  String get ruleSplitSuit => 'Afaka mizara (Loko)';
 
   @override
   String get ruleContinueOnTie => 'Miara miakatra (tohizo raha mitovy)';
@@ -91,19 +91,19 @@ class AppLocalizationsMg extends AppLocalizations {
   String get rulePointOnError => 'Isa omena amin\'ny fahadisoana';
 
   @override
-  String get ruleWinIfCapotInside => 'Maharesy raha capot dedans';
+  String get ruleWinIfCapotByDefense => 'Maharesy raha capot par la défense';
 
   @override
   String get ruleRedoubleNoTrumps => 'Afaka miantso Sans A surcontré';
 
   @override
-  String get ruleBet => 'Asio goûter kely';
+  String get ruleStake => 'Asio goûter kely';
 
   @override
-  String get ruleBetAmount => 'Vola apetraka (Ar)';
+  String get ruleStakeAmount => 'Vola apetraka (Ar)';
 
   @override
-  String get ruleDoubleAmountOnCapotScore => 'Mandoa double raha capot';
+  String get ruleStakeDoubledOnCapot => 'Mandoa double raha capot';
 
   @override
   String get contractLabel => 'Kontratra';
@@ -172,7 +172,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get capotCapot => 'Capot';
 
   @override
-  String get capotInside => 'Capot Dedans';
+  String get capotByDefense => 'Capot par la défense';
 
   @override
   String get calculatedStake => 'Vola voakajy';
@@ -228,13 +228,13 @@ class AppLocalizationsMg extends AppLocalizations {
   String get splitResult => 'Fizarana';
 
   @override
-  String get litigation => 'Adim-panahy';
+  String get dispute => 'Adim-panahy';
 
   @override
   String get splitSubtitle => 'Ampidiro ny isa amin\'ny tanana';
 
   @override
-  String get litigationSubtitle => 'Ny ekipa tsirairay mitahiry ny isa avy';
+  String get disputeSubtitle => 'Ny ekipa tsirairay mitahiry ny isa avy';
 
   @override
   String get noCurrentDeal => 'Tsy misy donne ankehitriny. Atombohy vaovao.';
@@ -308,7 +308,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get resultSplit => 'Fizarana';
 
   @override
-  String get resultLitigation => 'Adim-panahy';
+  String get resultDispute => 'Adim-panahy';
 
   @override
   String get resultPending => 'Mbola ao';
@@ -367,7 +367,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get noLabel => 'Tsia';
 
   @override
-  String betAmountLabel(int amount) {
+  String stakeAmountLabel(int amount) {
     return 'Eny ($amount Ar)';
   }
 

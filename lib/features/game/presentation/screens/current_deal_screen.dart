@@ -203,8 +203,8 @@ class _DealHeader extends StatelessWidget {
         return l10n.capotNone;
       case CapotType.capot:
         return l10n.capotCapot;
-      case CapotType.capotInside:
-        return l10n.capotInside;
+      case CapotType.capotByDefense:
+        return l10n.capotByDefense;
     }
   }
 }
@@ -267,7 +267,7 @@ class _OutcomeActions extends ConsumerWidget {
       finished,
     ];
     var next = game.copyWith(deals: updatedDeals);
-    next = next.continueCauseTie();
+    next = next.continueAfterTie();
     next = next.markFinishedIfNeeded();
     await ref
         .read(currentGameControllerProvider.notifier)
@@ -343,13 +343,13 @@ class _OutcomeActions extends ConsumerWidget {
         const SizedBox(height: 12),
         _OutcomeButton(
           icon: Icons.gavel,
-          label: l10n.litigation,
-          subtitle: l10n.litigationSubtitle,
+          label: l10n.dispute,
+          subtitle: l10n.disputeSubtitle,
           color: Colors.blueGrey,
           onTap: () => _applyOutcome(
             context,
             ref,
-            DealOutcome.litigation(game.ourScore, game.theirScore),
+            DealOutcome.dispute(game.ourScore, game.theirScore),
           ),
         ),
       ],

@@ -33,16 +33,16 @@
   "ruleFinalScore": "Score cible",
   "ruleSplitAllTrumps": "Partage autorisé (TA)",
   "ruleSplitNoTrumps": "Partage autorisé (SA)",
-  "ruleSplitColor": "Partage autorisé (Couleur)",
+  "ruleSplitSuit": "Partage autorisé (Couleur)",
   "ruleContinueOnTie": "Miara miakatra (continuer sur égalité)",
   "ruleStepsOnTie": "Palier en cas d'égalité",
   "rulePointIfError": "Points si erreur",
   "rulePointOnError": "Points attribués sur erreur",
-  "ruleWinIfCapotInside": "Gagner si capot dedans",
+  "ruleWinIfCapotByDefense": "Gagner si capot par la défense",
   "ruleRedoubleNoTrumps": "Surcontré sans atout",
-  "ruleBet": "Système de goûter activé",
-  "ruleBetAmount": "Mise (Ar)",
-  "ruleDoubleAmountOnCapotScore": "Doubler la mise sur capot",
+  "ruleStake": "Système de goûter activé",
+  "ruleStakeAmount": "Mise (Ar)",
+  "ruleStakeDoubledOnCapot": "Doubler la mise sur capot",
 
   "contractLabel": "Contrat",
   "bidLabel": "Enchère",
@@ -69,7 +69,7 @@
 
   "capotNone": "Aucun",
   "capotCapot": "Capot",
-  "capotInside": "Dedans",
+  "capotByDefense": "Capot défense",
 
   "calculatedStake": "Mise calculée",
   "splitAllowed": "Partage autorisé",
@@ -99,9 +99,9 @@
   "win": "On a gagné",
   "lose": "Ils ont gagné",
   "splitResult": "Partage",
-  "litigation": "Litige",
+  "dispute": "Litige",
   "splitSubtitle": "Saisir les scores manuellement",
-  "litigationSubtitle": "Chaque camp conserve ses points",
+  "disputeSubtitle": "Chaque camp conserve ses points",
   "noCurrentDeal": "Aucune donne en cours. Démarrez-en une nouvelle.",
   "chooseContractButton": "Choisir un contrat",
 
@@ -153,7 +153,7 @@
   "resultWon": "On a gagné",
   "resultLost": "Ils ont gagné",
   "resultSplit": "Partage",
-  "resultLitigation": "Litige",
+  "resultDispute": "Litige",
   "resultPending": "En cours",
   "tieTooltip": "Égalité appliquée (miara miakatra)",
   "dealSubtitle": "{date} • {result} • {ours} - {theirs}",
@@ -183,8 +183,8 @@
   "activeRules": "Règles actives",
   "yesLabel": "Oui",
   "noLabel": "Non",
-  "betAmountLabel": "Oui ({amount} Ar)",
-  "@betAmountLabel": {
+  "stakeAmountLabel": "Oui ({amount} Ar)",
+  "@stakeAmountLabel": {
     "placeholders": {
       "amount": { "type": "int" }
     }

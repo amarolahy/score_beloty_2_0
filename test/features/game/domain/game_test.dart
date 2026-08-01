@@ -79,19 +79,19 @@ void main() {
       expect(g.winner, Winner.them);
     });
 
-    test('continueCauseTie raises threshold when scores are tied', () {
+    test('continueAfterTie raises target when scores are tied', () {
       final g0 = _newGame().addDeal(_finishedDeal(ours: 50, theirs: 50));
-      expect(g0.effectiveFinalScoreValue, 150);
-      final g1 = g0.continueCauseTie();
-      expect(g1.effectiveFinalScoreValue, 200);
-      expect(g0.effectiveFinalScoreValue, 150, reason: 'original unchanged');
+      expect(g0.targetScore, 150);
+      final g1 = g0.continueAfterTie();
+      expect(g1.targetScore, 200);
+      expect(g0.targetScore, 150, reason: 'original unchanged');
     });
 
-    test('continueCauseTie is a no-op when continueOnTie is disabled', () {
+    test('continueAfterTie is a no-op when continueOnTie is disabled', () {
       final g0 = _newGame(rules: const Rules(continueOnTie: false))
           .addDeal(_finishedDeal(ours: 50, theirs: 50));
-      final g1 = g0.continueCauseTie();
-      expect(g1.effectiveFinalScoreValue, 150);
+      final g1 = g0.continueAfterTie();
+      expect(g1.targetScore, 150);
     });
 
     test('removeLastDeal removes and returns last deal', () {
@@ -100,7 +100,7 @@ void main() {
       expect(g1, isNotNull);
       expect(g1!.deals, isEmpty);
       expect(g1.ourScore, 0);
-      expect(g1.effectiveFinalScore, isNull);
+      expect(g1.raisedTarget, isNull);
     });
 
     test('removeLastDeal returns null on empty game', () {
@@ -114,14 +114,14 @@ void main() {
       expect(g1.state, GameState.finished);
     });
 
-    test('json roundtrip preserves deals and effective threshold', () {
+    test('json roundtrip preserves deals and raised target', () {
       final g0 = _newGame()
           .addDeal(_finishedDeal(ours: 80, theirs: 40))
-          .continueCauseTie();
+          .continueAfterTie();
       final restored = Game.fromJson(g0.toJson());
       expect(restored.ourScore, g0.ourScore);
       expect(restored.deals.length, 1);
-      expect(restored.effectiveFinalScoreValue, g0.effectiveFinalScoreValue);
+      expect(restored.targetScore, g0.targetScore);
     });
   });
 }

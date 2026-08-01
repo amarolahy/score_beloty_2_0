@@ -75,7 +75,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ruleSplitNoTrumps => 'Split allowed (No trumps)';
 
   @override
-  String get ruleSplitColor => 'Split allowed (Suit)';
+  String get ruleSplitSuit => 'Split allowed (Suit)';
 
   @override
   String get ruleContinueOnTie => 'Miara miakatra (continue on tie)';
@@ -90,19 +90,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rulePointOnError => 'Points awarded on error';
 
   @override
-  String get ruleWinIfCapotInside => 'Win if capot inside';
+  String get ruleWinIfCapotByDefense => 'Win if defense scores capot';
 
   @override
   String get ruleRedoubleNoTrumps => 'Redouble without trump';
 
   @override
-  String get ruleBet => 'Side bet enabled';
+  String get ruleStake => 'Side stake enabled';
 
   @override
-  String get ruleBetAmount => 'Bet amount (Ar)';
+  String get ruleStakeAmount => 'Stake amount (Ar)';
 
   @override
-  String get ruleDoubleAmountOnCapotScore => 'Double the bet on capot';
+  String get ruleStakeDoubledOnCapot => 'Double the stake on capot';
 
   @override
   String get contractLabel => 'Contract';
@@ -171,7 +171,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get capotCapot => 'Capot';
 
   @override
-  String get capotInside => 'Inside';
+  String get capotByDefense => 'Capot by defense';
 
   @override
   String get calculatedStake => 'Calculated stake';
@@ -227,13 +227,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splitResult => 'Split';
 
   @override
-  String get litigation => 'Litigation';
+  String get dispute => 'Dispute';
 
   @override
   String get splitSubtitle => 'Enter the scores manually';
 
   @override
-  String get litigationSubtitle => 'Both sides keep their points';
+  String get disputeSubtitle => 'Both sides keep their points';
 
   @override
   String get noCurrentDeal => 'No deal in progress. Start a new one.';
@@ -306,7 +306,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resultSplit => 'Split';
 
   @override
-  String get resultLitigation => 'Litigation';
+  String get resultDispute => 'Dispute';
 
   @override
   String get resultPending => 'Pending';
@@ -365,7 +365,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noLabel => 'No';
 
   @override
-  String betAmountLabel(int amount) {
+  String stakeAmountLabel(int amount) {
     return 'Yes ($amount Ar)';
   }
 

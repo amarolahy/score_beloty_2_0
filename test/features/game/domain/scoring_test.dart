@@ -4,27 +4,27 @@ import 'package:score_beloty_2_0/features/game/domain/rules.dart';
 import 'package:score_beloty_2_0/features/game/domain/scoring.dart';
 
 void main() {
-  group('ScoringEngine.dedansPoints', () {
+  group('ScoringEngine.trickPoints', () {
     test('returns 26 for all trumps', () {
-      expect(ScoringEngine.dedansPoints(ContractType.allTrumps), 26);
+      expect(ScoringEngine.trickPoints(ContractType.allTrumps), 26);
     });
 
     test('returns 52 for no trumps', () {
-      expect(ScoringEngine.dedansPoints(ContractType.noTrumps), 52);
+      expect(ScoringEngine.trickPoints(ContractType.noTrumps), 52);
     });
 
     test('returns 16 for spades/hearts/diamonds', () {
-      expect(ScoringEngine.dedansPoints(ContractType.spades), 16);
-      expect(ScoringEngine.dedansPoints(ContractType.hearts), 16);
-      expect(ScoringEngine.dedansPoints(ContractType.diamonds), 16);
+      expect(ScoringEngine.trickPoints(ContractType.spades), 16);
+      expect(ScoringEngine.trickPoints(ContractType.hearts), 16);
+      expect(ScoringEngine.trickPoints(ContractType.diamonds), 16);
     });
 
     test('returns 32 for clubs', () {
-      expect(ScoringEngine.dedansPoints(ContractType.clubs), 32);
+      expect(ScoringEngine.trickPoints(ContractType.clubs), 32);
     });
 
     test('returns 0 for error contract', () {
-      expect(ScoringEngine.dedansPoints(ContractType.error), 0);
+      expect(ScoringEngine.trickPoints(ContractType.error), 0);
     });
   });
 
@@ -45,34 +45,37 @@ void main() {
     });
   });
 
-  group('ScoringEngine.capotInsidePoints', () {
+  group('ScoringEngine.capotByDefensePoints', () {
     const rules = Rules(finalScore: 150);
 
-    test('all trumps capotInside = 45', () {
+    test('all trumps capot by defense = 45', () {
       expect(
-        ScoringEngine.capotInsidePoints(ContractType.allTrumps, rules),
+        ScoringEngine.capotByDefensePoints(ContractType.allTrumps, rules),
         45,
       );
     });
 
-    test('no trumps capotInside = 120', () {
+    test('no trumps capot by defense = 120', () {
       expect(
-        ScoringEngine.capotInsidePoints(ContractType.noTrumps, rules),
+        ScoringEngine.capotByDefensePoints(ContractType.noTrumps, rules),
         120,
       );
     });
 
-    test('color capotInside uses finalScore', () {
+    test('color capot by defense uses finalScore', () {
       expect(
-        ScoringEngine.capotInsidePoints(ContractType.spades, rules),
+        ScoringEngine.capotByDefensePoints(ContractType.spades, rules),
         150,
       );
     });
 
-    test('winIfCapotInside shortcut returns finalScore directly', () {
-      const rulesSpecial = Rules(winIfCapotInside: true, finalScore: 150);
+    test('winIfCapotByDefense shortcut returns finalScore directly', () {
+      const rulesSpecial = Rules(winIfCapotByDefense: true, finalScore: 150);
       expect(
-        ScoringEngine.capotInsidePoints(ContractType.allTrumps, rulesSpecial),
+        ScoringEngine.capotByDefensePoints(
+          ContractType.allTrumps,
+          rulesSpecial,
+        ),
         150,
       );
     });
@@ -88,7 +91,7 @@ void main() {
       );
     });
 
-    test('double returns 2 for color contracts', () {
+    test('double returns 2 for suit contracts', () {
       expect(
         ScoringEngine.bidMultiplier(
             BidType.double_, ContractType.spades, rules),
@@ -96,7 +99,7 @@ void main() {
       );
     });
 
-    test('redouble returns 4 for color contracts', () {
+    test('redouble returns 4 for suit contracts', () {
       expect(
         ScoringEngine.bidMultiplier(
             BidType.redouble, ContractType.spades, rules),
@@ -125,7 +128,7 @@ void main() {
   group('ScoringEngine.computeTotal', () {
     const rules = Rules(finalScore: 150);
 
-    test('dedans all trumps doubled = 52', () {
+    test('trick points all trumps doubled = 52', () {
       expect(
         ScoringEngine.computeTotal(
           contract: ContractType.allTrumps,
@@ -149,12 +152,12 @@ void main() {
       );
     });
 
-    test('capot inside color redoubled = 600', () {
+    test('capot by defense on suit redoubled = 600', () {
       expect(
         ScoringEngine.computeTotal(
           contract: ContractType.spades,
           bid: BidType.redouble,
-          capot: CapotType.capotInside,
+          capot: CapotType.capotByDefense,
           rules: rules,
         ),
         600,
@@ -189,7 +192,7 @@ void main() {
       );
     });
 
-    test('color follows splitColor rule', () {
+    test('suit follows splitSuit rule', () {
       expect(
         ScoringEngine.isSplitAllowed(ContractType.spades, defaultRules),
         isFalse,
@@ -197,7 +200,7 @@ void main() {
       expect(
         ScoringEngine.isSplitAllowed(
           ContractType.spades,
-          const Rules(splitColor: true),
+          const Rules(splitSuit: true),
         ),
         isTrue,
       );
@@ -229,9 +232,9 @@ void main() {
       expect(outcome.tie, isFalse);
     });
 
-    test('litigation marks tie when both sides match', () {
-      final outcome = DealOutcome.litigation(81, 81);
-      expect(outcome.result, ResultType.litigation);
+    test('dispute marks tie when both sides match', () {
+      final outcome = DealOutcome.dispute(81, 81);
+      expect(outcome.result, ResultType.dispute);
       expect(outcome.ourPoints, 81);
       expect(outcome.theirPoints, 81);
       expect(outcome.tie, isTrue);

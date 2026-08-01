@@ -7,14 +7,17 @@ enum ContractType {
   hearts,
   diamonds,
   clubs,
+
+  /// Deal ended because a player made an "error" (fausse annonce, played out
+  /// of turn, etc.); 16 points are awarded directly to the opposing team.
   error,
 }
 
 enum BidType { pass, double_, redouble }
 
-enum ResultType { weWin, theyWin, split, litigation }
+enum ResultType { weWin, theyWin, split, dispute }
 
-enum CapotType { no, capot, capotInside }
+enum CapotType { no, capot, capotByDefense }
 
 @immutable
 class Deal {

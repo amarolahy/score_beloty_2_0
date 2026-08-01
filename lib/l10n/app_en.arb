@@ -33,16 +33,16 @@
   "ruleFinalScore": "Target score",
   "ruleSplitAllTrumps": "Split allowed (All trumps)",
   "ruleSplitNoTrumps": "Split allowed (No trumps)",
-  "ruleSplitColor": "Split allowed (Suit)",
+  "ruleSplitSuit": "Split allowed (Suit)",
   "ruleContinueOnTie": "Miara miakatra (continue on tie)",
   "ruleStepsOnTie": "Tie step",
   "rulePointIfError": "Points on error",
   "rulePointOnError": "Points awarded on error",
-  "ruleWinIfCapotInside": "Win if capot inside",
+  "ruleWinIfCapotByDefense": "Win if defense scores capot",
   "ruleRedoubleNoTrumps": "Redouble without trump",
-  "ruleBet": "Side bet enabled",
-  "ruleBetAmount": "Bet amount (Ar)",
-  "ruleDoubleAmountOnCapotScore": "Double the bet on capot",
+  "ruleStake": "Side stake enabled",
+  "ruleStakeAmount": "Stake amount (Ar)",
+  "ruleStakeDoubledOnCapot": "Double the stake on capot",
 
   "contractLabel": "Contract",
   "bidLabel": "Bid",
@@ -69,7 +69,7 @@
 
   "capotNone": "None",
   "capotCapot": "Capot",
-  "capotInside": "Inside",
+  "capotByDefense": "Capot by defense",
 
   "calculatedStake": "Calculated stake",
   "splitAllowed": "Split allowed",
@@ -99,9 +99,9 @@
   "win": "We won",
   "lose": "They won",
   "splitResult": "Split",
-  "litigation": "Litigation",
+  "dispute": "Dispute",
   "splitSubtitle": "Enter the scores manually",
-  "litigationSubtitle": "Both sides keep their points",
+  "disputeSubtitle": "Both sides keep their points",
   "noCurrentDeal": "No deal in progress. Start a new one.",
   "chooseContractButton": "Pick a contract",
 
@@ -152,7 +152,7 @@
   "resultWon": "We won",
   "resultLost": "They won",
   "resultSplit": "Split",
-  "resultLitigation": "Litigation",
+  "resultDispute": "Dispute",
   "resultPending": "Pending",
   "tieTooltip": "Tie applied (miara miakatra)",
   "dealSubtitle": "{date} • {result} • {ours} - {theirs}",
@@ -182,8 +182,8 @@
   "activeRules": "Active rules",
   "yesLabel": "Yes",
   "noLabel": "No",
-  "betAmountLabel": "Yes ({amount} Ar)",
-  "@betAmountLabel": {
+  "stakeAmountLabel": "Yes ({amount} Ar)",
+  "@stakeAmountLabel": {
     "placeholders": {
       "amount": { "type": "int" }
     }

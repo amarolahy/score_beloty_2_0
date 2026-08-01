@@ -6,66 +6,86 @@ class Rules {
     this.finalScore = 150,
     this.splitAllTrumps = true,
     this.splitNoTrumps = false,
-    this.splitColor = false,
+    this.splitSuit = false,
     this.continueOnTie = true,
     this.stepsOnTie = 50,
     this.pointIfError = true,
     this.pointOnError = 10,
-    this.winIfCapotInside = false,
+    this.winIfCapotByDefense = false,
     this.redoubleNoTrumps = false,
-    this.atStake = false,
-    this.bet = false,
-    this.betAmount = 0,
-    this.doubleAmountOnCapotScore = true,
+    this.stake = false,
+    this.stakeAmount = 0,
+    this.stakeDoubledOnCapot = true,
   });
 
+  /// Score a team needs to reach for the game to end.
   final int finalScore;
+
+  /// Whether teams may split the trick points equally instead of declaring
+  /// a winner for the contract.
   final bool splitAllTrumps;
   final bool splitNoTrumps;
-  final bool splitColor;
+  final bool splitSuit;
+
+  /// "Miara miakatra" — when both teams are tied, raise the target score.
   final bool continueOnTie;
+
+  /// Increment added to the target score after a tie (when [continueOnTie] is
+  /// enabled).
   final int stepsOnTie;
+
+  /// Whether a team receives bonus points when a player makes an "error"
+  /// during the deal (fausse annonce, played out of turn, etc.).
   final bool pointIfError;
+
+  /// Bonus points awarded on an "error" when [pointIfError] is enabled.
   final int pointOnError;
-  final bool winIfCapotInside;
+
+  /// When true, a "capot scored by the defense" (capot par la défense, formerly
+  /// called "capot dedans") immediately wins the game.
+  final bool winIfCapotByDefense;
+
+  /// Whether a team may "redouble" (surcontrer) when the contract is "no trumps".
   final bool redoubleNoTrumps;
-  final bool atStake;
-  final bool bet;
-  final int betAmount;
-  final bool doubleAmountOnCapotScore;
+
+  /// Whether a side stake is enabled for the game.
+  final bool stake;
+
+  /// Amount of the side stake (in Ariary).
+  final int stakeAmount;
+
+  /// Whether the stake amount is doubled when a capot is scored.
+  final bool stakeDoubledOnCapot;
 
   Rules copyWith({
     int? finalScore,
     bool? splitAllTrumps,
     bool? splitNoTrumps,
-    bool? splitColor,
+    bool? splitSuit,
     bool? continueOnTie,
     int? stepsOnTie,
     bool? pointIfError,
     int? pointOnError,
-    bool? winIfCapotInside,
+    bool? winIfCapotByDefense,
     bool? redoubleNoTrumps,
-    bool? atStake,
-    bool? bet,
-    int? betAmount,
-    bool? doubleAmountOnCapotScore,
+    bool? stake,
+    int? stakeAmount,
+    bool? stakeDoubledOnCapot,
   }) {
     return Rules(
       finalScore: finalScore ?? this.finalScore,
       splitAllTrumps: splitAllTrumps ?? this.splitAllTrumps,
       splitNoTrumps: splitNoTrumps ?? this.splitNoTrumps,
-      splitColor: splitColor ?? this.splitColor,
+      splitSuit: splitSuit ?? this.splitSuit,
       continueOnTie: continueOnTie ?? this.continueOnTie,
       stepsOnTie: stepsOnTie ?? this.stepsOnTie,
       pointIfError: pointIfError ?? this.pointIfError,
       pointOnError: pointOnError ?? this.pointOnError,
-      winIfCapotInside: winIfCapotInside ?? this.winIfCapotInside,
+      winIfCapotByDefense: winIfCapotByDefense ?? this.winIfCapotByDefense,
       redoubleNoTrumps: redoubleNoTrumps ?? this.redoubleNoTrumps,
-      atStake: atStake ?? this.atStake,
-      bet: bet ?? this.bet,
-      betAmount: betAmount ?? this.betAmount,
-      doubleAmountOnCapotScore:
-          doubleAmountOnCapotScore ?? this.doubleAmountOnCapotScore,
+      stake: stake ?? this.stake,
+      stakeAmount: stakeAmount ?? this.stakeAmount,
+      stakeDoubledOnCapot: stakeDoubledOnCapot ?? this.stakeDoubledOnCapot,
     );
   }
 
@@ -73,35 +93,32 @@ class Rules {
         'finalScore': finalScore,
         'splitAllTrumps': splitAllTrumps,
         'splitNoTrumps': splitNoTrumps,
-        'splitColor': splitColor,
+        'splitSuit': splitSuit,
         'continueOnTie': continueOnTie,
         'stepsOnTie': stepsOnTie,
         'pointIfError': pointIfError,
         'pointOnError': pointOnError,
-        'winIfCapotInside': winIfCapotInside,
+        'winIfCapotByDefense': winIfCapotByDefense,
         'redoubleNoTrumps': redoubleNoTrumps,
-        'atStake': atStake,
-        'bet': bet,
-        'betAmount': betAmount,
-        'doubleAmountOnCapotScore': doubleAmountOnCapotScore,
+        'stake': stake,
+        'stakeAmount': stakeAmount,
+        'stakeDoubledOnCapot': stakeDoubledOnCapot,
       };
 
   factory Rules.fromJson(Map<String, dynamic> json) => Rules(
         finalScore: json['finalScore'] as int? ?? 150,
         splitAllTrumps: json['splitAllTrumps'] as bool? ?? true,
         splitNoTrumps: json['splitNoTrumps'] as bool? ?? false,
-        splitColor: json['splitColor'] as bool? ?? false,
+        splitSuit: json['splitSuit'] as bool? ?? false,
         continueOnTie: json['continueOnTie'] as bool? ?? true,
         stepsOnTie: json['stepsOnTie'] as int? ?? 50,
         pointIfError: json['pointIfError'] as bool? ?? true,
         pointOnError: json['pointOnError'] as int? ?? 10,
-        winIfCapotInside: json['winIfCapotInside'] as bool? ?? false,
+        winIfCapotByDefense: json['winIfCapotByDefense'] as bool? ?? false,
         redoubleNoTrumps: json['redoubleNoTrumps'] as bool? ?? false,
-        atStake: json['atStake'] as bool? ?? false,
-        bet: json['bet'] as bool? ?? false,
-        betAmount: json['betAmount'] as int? ?? 0,
-        doubleAmountOnCapotScore:
-            json['doubleAmountOnCapotScore'] as bool? ?? true,
+        stake: json['stake'] as bool? ?? false,
+        stakeAmount: json['stakeAmount'] as int? ?? 0,
+        stakeDoubledOnCapot: json['stakeDoubledOnCapot'] as bool? ?? true,
       );
 
   @override
@@ -111,17 +128,16 @@ class Rules {
         other.finalScore == finalScore &&
         other.splitAllTrumps == splitAllTrumps &&
         other.splitNoTrumps == splitNoTrumps &&
-        other.splitColor == splitColor &&
+        other.splitSuit == splitSuit &&
         other.continueOnTie == continueOnTie &&
         other.stepsOnTie == stepsOnTie &&
         other.pointIfError == pointIfError &&
         other.pointOnError == pointOnError &&
-        other.winIfCapotInside == winIfCapotInside &&
+        other.winIfCapotByDefense == winIfCapotByDefense &&
         other.redoubleNoTrumps == redoubleNoTrumps &&
-        other.atStake == atStake &&
-        other.bet == bet &&
-        other.betAmount == betAmount &&
-        other.doubleAmountOnCapotScore == doubleAmountOnCapotScore;
+        other.stake == stake &&
+        other.stakeAmount == stakeAmount &&
+        other.stakeDoubledOnCapot == stakeDoubledOnCapot;
   }
 
   @override
@@ -129,16 +145,15 @@ class Rules {
         finalScore,
         splitAllTrumps,
         splitNoTrumps,
-        splitColor,
+        splitSuit,
         continueOnTie,
         stepsOnTie,
         pointIfError,
         pointOnError,
-        winIfCapotInside,
+        winIfCapotByDefense,
         redoubleNoTrumps,
-        atStake,
-        bet,
-        betAmount,
-        doubleAmountOnCapotScore,
+        stake,
+        stakeAmount,
+        stakeDoubledOnCapot,
       );
 }
