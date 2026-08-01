@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 
 class GameInfoScreen extends ConsumerWidget {
@@ -10,67 +11,68 @@ class GameInfoScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(currentGameControllerProvider);
+    final l10n = AppLocalizations.of(context);
     if (game == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Informations')),
-        body: const Center(child: Text('Aucune partie en cours.')),
+        appBar: AppBar(title: Text(l10n.infoTitle)),
+        body: Center(child: Text(l10n.noGameInProgress)),
       );
     }
-    final dateFormat = DateFormat('EEE dd/MM/yy HH:mm', 'fr_FR');
+    final dateFormat = DateFormat('EEE dd/MM/yy HH:mm', Localizations.localeOf(context).toString());
     return Scaffold(
-      appBar: AppBar(title: const Text('Informations')),
+      appBar: AppBar(title: Text(l10n.infoTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _InfoTile(label: 'Début', value: dateFormat.format(game.createdOn)),
-            _InfoTile(label: 'Donnes', value: game.deals.length.toString()),
+            _InfoTile(label: l10n.startTime, value: dateFormat.format(game.createdOn)),
+            _InfoTile(label: l10n.dealsCountLabel, value: l10n.dealsCount(game.deals.length)),
             _InfoTile(
-              label: 'Notre équipe',
+              label: l10n.ourTeamInfo,
               value: '${game.us.player1} & ${game.us.player2}',
             ),
             _InfoTile(
-              label: 'Équipe adverse',
+              label: l10n.theirTeamInfo,
               value: '${game.them.player1} & ${game.them.player2}',
             ),
             _InfoTile(
-              label: 'Score initial (nous)',
+              label: l10n.ourInitialScore,
               value: '${game.us.initialScore}',
             ),
             _InfoTile(
-              label: 'Score initial (eux)',
+              label: l10n.theirInitialScore,
               value: '${game.them.initialScore}',
             ),
-            _InfoTile(label: 'Score cible', value: '${game.rules.finalScore}'),
+            _InfoTile(label: l10n.targetScore, value: '${game.rules.finalScore}'),
             const Divider(height: 32),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                'Règles actives',
-                style: TextStyle(fontWeight: FontWeight.w700),
+                l10n.activeRules,
+                style: const TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
             _InfoTile(
-              label: 'Partage autorisé (TA)',
-              value: game.rules.splitAllTrumps ? 'Oui' : 'Non',
+              label: l10n.ruleSplitAllTrumps,
+              value: game.rules.splitAllTrumps ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
-              label: 'Partage autorisé (SA)',
-              value: game.rules.splitNoTrumps ? 'Oui' : 'Non',
+              label: l10n.ruleSplitNoTrumps,
+              value: game.rules.splitNoTrumps ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
-              label: 'Partage autorisé (Couleur)',
-              value: game.rules.splitColor ? 'Oui' : 'Non',
+              label: l10n.ruleSplitColor,
+              value: game.rules.splitColor ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
-              label: 'Miara miakatra',
-              value: game.rules.continueOnTie ? 'Oui' : 'Non',
+              label: l10n.ruleContinueOnTie,
+              value: game.rules.continueOnTie ? l10n.yesLabel : l10n.noLabel,
             ),
             _InfoTile(
-              label: 'Système de goûter',
+              label: l10n.ruleBet,
               value: game.rules.bet
-                  ? 'Oui (${game.rules.betAmount} Ar)'
-                  : 'Non',
+                  ? l10n.betAmountLabel(game.rules.betAmount)
+                  : l10n.noLabel,
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/router.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/deal.dart';
 import '../../domain/game.dart';
@@ -15,13 +16,14 @@ class DealsHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(currentGameControllerProvider);
+    final l10n = AppLocalizations.of(context);
     final empty = game == null || game.deals.isEmpty;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historique des donnes'),
+        title: Text(l10n.dealsHistoryTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          tooltip: 'Retour',
+          tooltip: l10n.backTooltip,
           onPressed: () => _goBack(context, game),
         ),
       ),
@@ -53,13 +55,12 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          hasGame
-              ? 'Aucune donne enregistrée pour cette partie.'
-              : 'Aucune partie en cours.',
+          hasGame ? l10n.noDealsRecorded : l10n.noGameInProgress,
           textAlign: TextAlign.center,
         ),
       ),
@@ -74,7 +75,9 @@ class _DealsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('EEE dd/MM HH:mm', 'fr_FR');
+    final l10n = AppLocalizations.of(context);
+    final dateFormat =
+        DateFormat('EEE dd/MM HH:mm', Localizations.localeOf(context).toString());
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: deals.length,
@@ -88,17 +91,20 @@ class _DealsList extends StatelessWidget {
               result: deal.result,
             ),
             title: Text(
-              '${_contractLabel(deal.contract)} '
-              '(${_bidLabel(deal.bid)} - ${_capotLabel(deal.capot)})',
+              '${_contractLabel(l10n, deal.contract)} '
+              '(${_bidLabel(l10n, deal.bid)} - ${_capotLabel(l10n, deal.capot)})',
             ),
             subtitle: Text(
-              '${dateFormat.format(deal.beginAt)} • '
-              '${_resultLabel(deal.result)} • '
-              '${deal.ourPoints} - ${deal.theirPoints}',
+              l10n.dealSubtitle(
+                dateFormat.format(deal.beginAt),
+                _resultLabel(l10n, deal.result),
+                deal.ourPoints,
+                deal.theirPoints,
+              ),
             ),
             trailing: deal.tie
                 ? Tooltip(
-                    message: 'Égalité appliquée (miara miakatra)',
+                    message: l10n.tieTooltip,
                     child: Icon(
                       Icons.compare_arrows,
                       color: Theme.of(context).colorScheme.primary,
@@ -111,59 +117,59 @@ class _DealsList extends StatelessWidget {
     );
   }
 
-  String _contractLabel(ContractType c) {
+  String _contractLabel(AppLocalizations l10n, ContractType c) {
     switch (c) {
       case ContractType.allTrumps:
-        return 'TA';
+        return l10n.contractShortAllTrumps;
       case ContractType.noTrumps:
-        return 'SA';
+        return l10n.contractShortNoTrumps;
       case ContractType.spades:
-        return 'Pique';
+        return l10n.contractShortSpades;
       case ContractType.hearts:
-        return 'Cœur';
+        return l10n.contractShortHearts;
       case ContractType.diamonds:
-        return 'Carreau';
+        return l10n.contractShortDiamonds;
       case ContractType.clubs:
-        return 'Trèfle';
+        return l10n.contractShortClubs;
       case ContractType.error:
-        return '—';
+        return l10n.contractShortError;
     }
   }
 
-  String _bidLabel(BidType b) {
+  String _bidLabel(AppLocalizations l10n, BidType b) {
     switch (b) {
       case BidType.pass:
-        return 'Passe';
+        return l10n.bidPass;
       case BidType.double_:
-        return 'Contré';
+        return l10n.bidDouble;
       case BidType.redouble:
-        return 'Surcontré';
+        return l10n.bidRedouble;
     }
   }
 
-  String _capotLabel(CapotType c) {
+  String _capotLabel(AppLocalizations l10n, CapotType c) {
     switch (c) {
       case CapotType.no:
-        return 'Aucun';
+        return l10n.capotNone;
       case CapotType.capot:
-        return 'Capot';
+        return l10n.capotCapot;
       case CapotType.capotInside:
-        return 'Dedans';
+        return l10n.capotInside;
     }
   }
 
-  String _resultLabel(ResultType? r) {
+  String _resultLabel(AppLocalizations l10n, ResultType? r) {
     switch (r) {
       case ResultType.weWin:
-        return 'On a gagné';
+        return l10n.resultWon;
       case ResultType.theyWin:
-        return 'Ils ont gagné';
+        return l10n.resultLost;
       case ResultType.split:
-        return 'Partage';
+        return l10n.resultSplit;
       case ResultType.litigation:
-        return 'Litige';
+        return l10n.resultLitigation;
       case null:
-        return 'En cours';
+        return l10n.resultPending;
     }
   }
 }

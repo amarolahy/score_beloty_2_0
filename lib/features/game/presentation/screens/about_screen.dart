@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import 'home_shell.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -8,6 +9,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -29,31 +31,31 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Center(
               child: Text(
-                'Score Beloty 2.0',
+                '${l10n.appTitle} 2.0',
                 style: theme.textTheme.headlineSmall,
               ),
             ),
             const SizedBox(height: 8),
             Center(
               child: Text(
-                'Compteur de scores pour la belote malgache.',
+                l10n.appSubtitle,
                 style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 32),
-            const Card(
+            Card(
               child: ListTile(
-                leading: Icon(Icons.info_outline),
-                title: Text('Version'),
-                subtitle: Text('2.0.0'),
+                leading: const Icon(Icons.info_outline),
+                title: Text(l10n.version),
+                subtitle: Text(l10n.versionValue),
               ),
             ),
-            const Card(
+            Card(
               child: ListTile(
-                leading: Icon(Icons.code),
-                title: Text('Développé par'),
-                subtitle: Text('Solvers 2018'),
+                leading: const Icon(Icons.code),
+                title: Text(l10n.developer),
+                subtitle: Text(l10n.developerValue),
               ),
             ),
           ],

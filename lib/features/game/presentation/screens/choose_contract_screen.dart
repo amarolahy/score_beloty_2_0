@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/deal.dart';
 import '../../domain/game.dart';
@@ -32,15 +33,6 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
     ContractType.clubs,
   ];
 
-  static const Map<ContractType, String> _labels = {
-    ContractType.allTrumps: 'Tout atout',
-    ContractType.noTrumps: 'Sans atout',
-    ContractType.spades: 'Pique',
-    ContractType.hearts: 'Cœur',
-    ContractType.diamonds: 'Carreau',
-    ContractType.clubs: 'Trèfle',
-  };
-
   Future<void> _startDeal(Game game) async {
     final deal = Deal(
       contract: _contract,
@@ -58,21 +50,20 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
   }
 
   Future<void> _cancelLast(Game game) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Annuler la dernière donne'),
-        content: const Text(
-          'La donne précédente sera supprimée. Continuer ?',
-        ),
+        title: Text(l10n.cancelLastDealDialogTitle),
+        content: Text(l10n.cancelLastDealDialogMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Retour'),
+            child: Text(l10n.backAction),
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelAction),
           ),
         ],
       ),
@@ -85,9 +76,10 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
   Widget build(BuildContext context) {
     final game = ref.watch(currentGameControllerProvider);
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     if (game == null) {
-      return const _MissingGameView();
+      return _MissingGameView();
     }
 
     final canRedouble = !(game.rules.redoubleNoTrumps == false &&
@@ -99,27 +91,29 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
         children: [
           _ScoreBanner(game: game),
           const SizedBox(height: 24),
-          Text('Contrat', style: theme.textTheme.titleMedium),
+          Text(l10n.contractLabel, style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
           _ContractSelector(
             contracts: _order,
-            labels: _labels,
+            labels: _contractLabels(l10n),
             selected: _contract,
             onChanged: (c) => setState(() => _contract = c),
           ),
           const SizedBox(height: 24),
-          Text('Enchère', style: theme.textTheme.titleMedium),
+          Text(l10n.bidLabel, style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
           _BidSelector(
             selected: _bid,
             canRedouble: canRedouble,
+            labels: _bidLabels(l10n),
             onChanged: (b) => setState(() => _bid = b),
           ),
           const SizedBox(height: 24),
-          Text('Capot', style: theme.textTheme.titleMedium),
+          Text(l10n.capotLabel, style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
           _CapotSelector(
             selected: _capot,
+            labels: _capotLabels(l10n),
             onChanged: (c) => setState(() => _capot = c),
           ),
           const SizedBox(height: 24),
@@ -128,6 +122,8 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
             bid: _bid,
             capot: _capot,
             rules: game.rules,
+            calculatedStakeLabel: l10n.calculatedStake,
+            splitAllowedLabel: l10n.splitAllowed,
           ),
           const SizedBox(height: 24),
           FilledButton.icon(
@@ -135,27 +131,47 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
                 ? null
                 : () => _startDeal(game),
             icon: const Icon(Icons.play_arrow),
-            label: const Text('COMMENCER LA DONNE'),
+            label: Text(l10n.startDealButton),
           ),
           if (game.deals.isNotEmpty) ...[
             const SizedBox(height: 12),
             OutlinedButton.icon(
               onPressed: () => _cancelLast(game),
               icon: const Icon(Icons.undo),
-              label: const Text('Annuler la dernière donne'),
+              label: Text(l10n.cancelLastDealButton),
             ),
           ],
         ],
       ),
     );
   }
+
+  Map<ContractType, String> _contractLabels(AppLocalizations l10n) => {
+        ContractType.allTrumps: l10n.contractAllTrumps,
+        ContractType.noTrumps: l10n.contractNoTrumps,
+        ContractType.spades: l10n.contractSpades,
+        ContractType.hearts: l10n.contractHearts,
+        ContractType.diamonds: l10n.contractDiamonds,
+        ContractType.clubs: l10n.contractClubs,
+      };
+
+  Map<BidType, String> _bidLabels(AppLocalizations l10n) => {
+        BidType.pass: l10n.bidPass,
+        BidType.double_: l10n.bidDouble,
+        BidType.redouble: l10n.bidRedouble,
+      };
+
+  Map<CapotType, String> _capotLabels(AppLocalizations l10n) => {
+        CapotType.no: l10n.capotNone,
+        CapotType.capot: l10n.capotCapot,
+        CapotType.capotInside: l10n.capotInside,
+      };
 }
 
 class _MissingGameView extends StatelessWidget {
-  const _MissingGameView();
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -164,11 +180,11 @@ class _MissingGameView extends StatelessWidget {
           children: [
             const Icon(Icons.info_outline, size: 56),
             const SizedBox(height: 12),
-            const Text('Aucune partie en cours'),
+            Text(l10n.noCurrentGame),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => context.go(AppRoutes.newGame),
-              child: const Text('Nouvelle partie'),
+              child: Text(l10n.newGame),
             ),
           ],
         ),
@@ -185,6 +201,7 @@ class _ScoreBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: theme.colorScheme.primaryContainer,
       child: Padding(
@@ -220,7 +237,7 @@ class _ScoreBanner extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Cible: ${game.effectiveFinalScoreValue}',
+              l10n.target(game.effectiveFinalScoreValue),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onPrimaryContainer,
               ),
@@ -323,22 +340,27 @@ class _BidSelector extends StatelessWidget {
   const _BidSelector({
     required this.selected,
     required this.canRedouble,
+    required this.labels,
     required this.onChanged,
   });
 
   final BidType selected;
   final bool canRedouble;
+  final Map<BidType, String> labels;
   final ValueChanged<BidType> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return SegmentedButton<BidType>(
       segments: [
-        ButtonSegment(value: BidType.pass, label: const Text('Passe')),
-        ButtonSegment(value: BidType.double_, label: const Text('Contré')),
+        ButtonSegment(value: BidType.pass, label: Text(labels[BidType.pass]!)),
+        ButtonSegment(
+          value: BidType.double_,
+          label: Text(labels[BidType.double_]!),
+        ),
         ButtonSegment(
           value: BidType.redouble,
-          label: const Text('Surcontré'),
+          label: Text(labels[BidType.redouble]!),
           enabled: canRedouble,
         ),
       ],
@@ -349,18 +371,29 @@ class _BidSelector extends StatelessWidget {
 }
 
 class _CapotSelector extends StatelessWidget {
-  const _CapotSelector({required this.selected, required this.onChanged});
+  const _CapotSelector({
+    required this.selected,
+    required this.labels,
+    required this.onChanged,
+  });
 
   final CapotType selected;
+  final Map<CapotType, String> labels;
   final ValueChanged<CapotType> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return SegmentedButton<CapotType>(
-      segments: const [
-        ButtonSegment(value: CapotType.no, label: Text('Aucun')),
-        ButtonSegment(value: CapotType.capot, label: Text('Capot')),
-        ButtonSegment(value: CapotType.capotInside, label: Text('Dedans')),
+      segments: [
+        ButtonSegment(value: CapotType.no, label: Text(labels[CapotType.no]!)),
+        ButtonSegment(
+          value: CapotType.capot,
+          label: Text(labels[CapotType.capot]!),
+        ),
+        ButtonSegment(
+          value: CapotType.capotInside,
+          label: Text(labels[CapotType.capotInside]!),
+        ),
       ],
       selected: {selected},
       onSelectionChanged: (set) => onChanged(set.first),
@@ -374,16 +407,21 @@ class _ScorePreview extends StatelessWidget {
     required this.bid,
     required this.capot,
     required this.rules,
+    required this.calculatedStakeLabel,
+    required this.splitAllowedLabel,
   });
 
   final ContractType contract;
   final BidType bid;
   final CapotType capot;
   final dynamic rules;
+  final String calculatedStakeLabel;
+  final String splitAllowedLabel;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final total = ScoringEngine.computeTotal(
       contract: contract,
       bid: bid,
@@ -407,13 +445,13 @@ class _ScorePreview extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Mise calculée',
+                    calculatedStakeLabel,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSecondaryContainer,
                     ),
                   ),
                   Text(
-                    '$total points',
+                    l10n.pointsUnit(total),
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: theme.colorScheme.onSecondaryContainer,
                       fontWeight: FontWeight.w700,
@@ -421,7 +459,7 @@ class _ScorePreview extends StatelessWidget {
                   ),
                   if (splitAllowed)
                     Text(
-                      'Partage autorisé',
+                      splitAllowedLabel,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSecondaryContainer,
                       ),

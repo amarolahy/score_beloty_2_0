@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/game.dart';
 import '../../domain/rules.dart';
@@ -62,44 +63,52 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
           children: [
-            Text('Nouvelle partie', style: theme.textTheme.headlineSmall),
+            Text(l10n.newGameTitle, style: theme.textTheme.headlineSmall),
             const SizedBox(height: 4),
-            Text(
-              'Saisissez les joueurs et les scores de départ.',
-              style: theme.textTheme.bodyMedium,
-            ),
+            Text(l10n.newGameSubtitle, style: theme.textTheme.bodyMedium),
             const SizedBox(height: 24),
             _TeamCard(
-              title: 'Notre équipe',
+              title: l10n.ourTeam,
               accent: theme.colorScheme.primary,
+              player1Label: l10n.player1,
+              player2Label: l10n.player2,
+              scoreLabel: l10n.initialScore,
               player1: _usP1,
               player2: _usP2,
               score: _usScore,
+              requiredFieldLabel: l10n.requiredField,
+              invalidScoreLabel: l10n.invalidScore,
             ),
             const SizedBox(height: 16),
             _TeamCard(
-              title: 'Équipe adverse',
+              title: l10n.theirTeam,
               accent: theme.colorScheme.tertiary,
+              player1Label: l10n.player1,
+              player2Label: l10n.player2,
+              scoreLabel: l10n.initialScore,
               player1: _themP1,
               player2: _themP2,
               score: _themScore,
+              requiredFieldLabel: l10n.requiredField,
+              invalidScoreLabel: l10n.invalidScore,
             ),
             const SizedBox(height: 24),
             Card(
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text('Règles avancées'),
+                    title: Text(l10n.advancedRules),
                     subtitle: Text(
                       _rules == const Rules()
-                          ? 'Réglages par défaut'
-                          : 'Personnalisé',
+                          ? l10n.defaultRules
+                          : l10n.customRules,
                     ),
                     trailing: Icon(
                       _showAdvanced
@@ -109,10 +118,11 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
                     onTap: () =>
                         setState(() => _showAdvanced = !_showAdvanced),
                   ),
-                  if (_showAdvanced) _RulesEditor(
-                    rules: _rules,
-                    onChanged: (r) => setState(() => _rules = r),
-                  ),
+                  if (_showAdvanced)
+                    _RulesEditor(
+                      rules: _rules,
+                      onChanged: (r) => setState(() => _rules = r),
+                    ),
                 ],
               ),
             ),
@@ -120,7 +130,7 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
             FilledButton.icon(
               onPressed: _submit,
               icon: const Icon(Icons.play_arrow),
-              label: const Text('COMMENCER'),
+              label: Text(l10n.startButton),
             ),
           ],
         ),
@@ -133,16 +143,26 @@ class _TeamCard extends StatelessWidget {
   const _TeamCard({
     required this.title,
     required this.accent,
+    required this.player1Label,
+    required this.player2Label,
+    required this.scoreLabel,
     required this.player1,
     required this.player2,
     required this.score,
+    required this.requiredFieldLabel,
+    required this.invalidScoreLabel,
   });
 
   final String title;
   final Color accent;
+  final String player1Label;
+  final String player2Label;
+  final String scoreLabel;
   final TextEditingController player1;
   final TextEditingController player2;
   final TextEditingController score;
+  final String requiredFieldLabel;
+  final String invalidScoreLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -172,54 +192,47 @@ class _TeamCard extends StatelessWidget {
             const SizedBox(height: 12),
             TextFormField(
               controller: player1,
-              decoration: const InputDecoration(
-                labelText: 'Joueur 1',
-                prefixIcon: Icon(Icons.person_outline),
+              decoration: InputDecoration(
+                labelText: player1Label,
+                prefixIcon: const Icon(Icons.person_outline),
               ),
               textInputAction: TextInputAction.next,
-              validator: _required,
+              validator: (v) =>
+                  (v == null || v.trim().isEmpty) ? requiredFieldLabel : null,
               inputFormatters: [LengthLimitingTextInputFormatter(32)],
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: player2,
-              decoration: const InputDecoration(
-                labelText: 'Joueur 2',
-                prefixIcon: Icon(Icons.person_outline),
+              decoration: InputDecoration(
+                labelText: player2Label,
+                prefixIcon: const Icon(Icons.person_outline),
               ),
               textInputAction: TextInputAction.next,
-              validator: _required,
+              validator: (v) =>
+                  (v == null || v.trim().isEmpty) ? requiredFieldLabel : null,
               inputFormatters: [LengthLimitingTextInputFormatter(32)],
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: score,
-              decoration: const InputDecoration(
-                labelText: 'Score initial',
-                prefixIcon: Icon(Icons.scoreboard_outlined),
+              decoration: InputDecoration(
+                labelText: scoreLabel,
+                prefixIcon: const Icon(Icons.scoreboard_outlined),
               ),
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              validator: _validateScore,
+              validator: (v) {
+                if (v == null || v.isEmpty) return requiredFieldLabel;
+                final n = int.tryParse(v);
+                if (n == null || n < 0) return invalidScoreLabel;
+                return null;
+              },
             ),
           ],
         ),
       ),
     );
-  }
-
-  String? _required(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Champ obligatoire';
-    }
-    return null;
-  }
-
-  String? _validateScore(String? value) {
-    if (value == null || value.isEmpty) return 'Champ obligatoire';
-    final n = int.tryParse(value);
-    if (n == null || n < 0) return 'Score invalide';
-    return null;
   }
 }
 
@@ -231,74 +244,75 @@ class _RulesEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _NumberField(
-            label: 'Score cible',
+            label: l10n.ruleFinalScore,
             value: rules.finalScore,
             onChanged: (v) => onChanged(rules.copyWith(finalScore: v)),
           ),
           SwitchListTile(
-            title: const Text('Partage autorisé (TA)'),
+            title: Text(l10n.ruleSplitAllTrumps),
             value: rules.splitAllTrumps,
             onChanged: (v) => onChanged(rules.copyWith(splitAllTrumps: v)),
           ),
           SwitchListTile(
-            title: const Text('Partage autorisé (SA)'),
+            title: Text(l10n.ruleSplitNoTrumps),
             value: rules.splitNoTrumps,
             onChanged: (v) => onChanged(rules.copyWith(splitNoTrumps: v)),
           ),
           SwitchListTile(
-            title: const Text('Partage autorisé (Couleur)'),
+            title: Text(l10n.ruleSplitColor),
             value: rules.splitColor,
             onChanged: (v) => onChanged(rules.copyWith(splitColor: v)),
           ),
           SwitchListTile(
-            title: const Text('Miara miakatra (continuer sur égalité)'),
+            title: Text(l10n.ruleContinueOnTie),
             value: rules.continueOnTie,
             onChanged: (v) => onChanged(rules.copyWith(continueOnTie: v)),
           ),
           _NumberField(
-            label: 'Palier en cas d\'égalité',
+            label: l10n.ruleStepsOnTie,
             value: rules.stepsOnTie,
             onChanged: (v) => onChanged(rules.copyWith(stepsOnTie: v)),
           ),
           SwitchListTile(
-            title: const Text('Points si erreur'),
+            title: Text(l10n.rulePointIfError),
             value: rules.pointIfError,
             onChanged: (v) => onChanged(rules.copyWith(pointIfError: v)),
           ),
           _NumberField(
-            label: 'Points attribués sur erreur',
+            label: l10n.rulePointOnError,
             value: rules.pointOnError,
             onChanged: (v) => onChanged(rules.copyWith(pointOnError: v)),
           ),
           SwitchListTile(
-            title: const Text('Gagner si capot dedans'),
+            title: Text(l10n.ruleWinIfCapotInside),
             value: rules.winIfCapotInside,
             onChanged: (v) => onChanged(rules.copyWith(winIfCapotInside: v)),
           ),
           SwitchListTile(
-            title: const Text('Surcontré sans atout'),
+            title: Text(l10n.ruleRedoubleNoTrumps),
             value: rules.redoubleNoTrumps,
             onChanged: (v) => onChanged(rules.copyWith(redoubleNoTrumps: v)),
           ),
           SwitchListTile(
-            title: const Text('Système de goûter activé'),
+            title: Text(l10n.ruleBet),
             value: rules.bet,
             onChanged: (v) => onChanged(rules.copyWith(bet: v)),
           ),
           if (rules.bet) ...[
             _NumberField(
-              label: 'Mise (Ar)',
+              label: l10n.ruleBetAmount,
               value: rules.betAmount,
               onChanged: (v) => onChanged(rules.copyWith(betAmount: v)),
             ),
             SwitchListTile(
-              title: const Text('Doubler la mise sur capot'),
+              title: Text(l10n.ruleDoubleAmountOnCapotScore),
               value: rules.doubleAmountOnCapotScore,
               onChanged: (v) => onChanged(
                 rules.copyWith(doubleAmountOnCapotScore: v),

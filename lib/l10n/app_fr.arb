@@ -1,0 +1,218 @@
+{
+  "@@locale": "fr",
+
+  "appTitle": "Score Beloty",
+  "@appTitle": {
+    "description": "Application name shown in the AppBar and About screen."
+  },
+
+  "appSubtitle": "Compteur de scores pour la belote malgache.",
+  "@appSubtitle": {
+    "description": "Subtitle shown below the logo on the About screen."
+  },
+
+  "newGame": "Nouvelle partie",
+  "history": "Historique",
+  "about": "À propos",
+  "language": "Langue",
+
+  "newGameTitle": "Nouvelle partie",
+  "newGameSubtitle": "Saisissez les joueurs et les scores de départ.",
+  "ourTeam": "Notre équipe",
+  "theirTeam": "Équipe adverse",
+  "player1": "Joueur 1",
+  "player2": "Joueur 2",
+  "initialScore": "Score initial",
+  "requiredField": "Champ obligatoire",
+  "invalidScore": "Score invalide",
+  "advancedRules": "Règles avancées",
+  "defaultRules": "Réglages par défaut",
+  "customRules": "Personnalisé",
+  "startButton": "COMMENCER",
+
+  "ruleFinalScore": "Score cible",
+  "ruleSplitAllTrumps": "Partage autorisé (TA)",
+  "ruleSplitNoTrumps": "Partage autorisé (SA)",
+  "ruleSplitColor": "Partage autorisé (Couleur)",
+  "ruleContinueOnTie": "Miara miakatra (continuer sur égalité)",
+  "ruleStepsOnTie": "Palier en cas d'égalité",
+  "rulePointIfError": "Points si erreur",
+  "rulePointOnError": "Points attribués sur erreur",
+  "ruleWinIfCapotInside": "Gagner si capot dedans",
+  "ruleRedoubleNoTrumps": "Surcontré sans atout",
+  "ruleBet": "Système de goûter activé",
+  "ruleBetAmount": "Mise (Ar)",
+  "ruleDoubleAmountOnCapotScore": "Doubler la mise sur capot",
+
+  "contractLabel": "Contrat",
+  "bidLabel": "Enchère",
+  "capotLabel": "Capot",
+
+  "contractAllTrumps": "Tout atout",
+  "contractNoTrumps": "Sans atout",
+  "contractSpades": "Pique",
+  "contractHearts": "Cœur",
+  "contractDiamonds": "Carreau",
+  "contractClubs": "Trèfle",
+  "contractError": "Erreur",
+  "contractShortAllTrumps": "TA",
+  "contractShortNoTrumps": "SA",
+  "contractShortSpades": "Pique",
+  "contractShortHearts": "Cœur",
+  "contractShortDiamonds": "Carreau",
+  "contractShortClubs": "Trèfle",
+  "contractShortError": "—",
+
+  "bidPass": "Passe",
+  "bidDouble": "Contré",
+  "bidRedouble": "Surcontré",
+
+  "capotNone": "Aucun",
+  "capotCapot": "Capot",
+  "capotInside": "Dedans",
+
+  "calculatedStake": "Mise calculée",
+  "splitAllowed": "Partage autorisé",
+  "pointsUnit": "{points} points",
+  "@pointsUnit": {
+    "description": "Displayed total for a deal. Plural-agnostic in French.",
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "startDealButton": "COMMENCER LA DONNE",
+  "cancelLastDealButton": "Annuler la dernière donne",
+  "cancelLastDealDialogTitle": "Annuler la dernière donne",
+  "cancelLastDealDialogMessage": "La donne précédente sera supprimée. Continuer ?",
+  "backAction": "Retour",
+  "cancelAction": "Annuler",
+  "okAction": "OK",
+  "noCurrentGame": "Aucune partie en cours",
+  "target": "Cible : {score}",
+  "@target": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "dealResultTitle": "Résultat de la donne",
+  "win": "On a gagné",
+  "lose": "Ils ont gagné",
+  "splitResult": "Partage",
+  "litigation": "Litige",
+  "splitSubtitle": "Saisir les scores manuellement",
+  "litigationSubtitle": "Chaque camp conserve ses points",
+  "noCurrentDeal": "Aucune donne en cours. Démarrez-en une nouvelle.",
+  "chooseContractButton": "Choisir un contrat",
+
+  "pointsDelta": "+{points} points",
+  "@pointsDelta": {
+    "description": "Positive point delta appended to the win/lose result.",
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+
+  "splitTitle": "Partage",
+  "contractWithLabel": "Contrat : {contract}",
+  "@contractWithLabel": {
+    "placeholders": {
+      "contract": { "type": "String" }
+    }
+  },
+  "expectedTotalLabel": "Somme attendue : {total} • Maximum par équipe : {max}",
+  "@expectedTotalLabel": {
+    "placeholders": {
+      "total": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "ourScoreLabel": "Notre score",
+  "theirScoreLabel": "Leur score",
+  "invertTooltip": "Inverser",
+  "invalidValues": "Valeurs invalides",
+  "sumMustBeLabel": "La somme doit valoir {expected} (saisie : {actual})",
+  "@sumMustBeLabel": {
+    "placeholders": {
+      "expected": { "type": "int" },
+      "actual": { "type": "int" }
+    }
+  },
+  "maxPerTeamLabel": "Maximum par équipe : {max} points",
+  "@maxPerTeamLabel": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "validate": "VALIDER",
+
+  "dealsHistoryTitle": "Historique des donnes",
+  "noDealsRecorded": "Aucune donne enregistrée pour cette partie.",
+  "noGameInProgress": "Aucune partie en cours.",
+  "backTooltip": "Retour",
+  "resultWon": "On a gagné",
+  "resultLost": "Ils ont gagné",
+  "resultSplit": "Partage",
+  "resultLitigation": "Litige",
+  "resultPending": "En cours",
+  "tieTooltip": "Égalité appliquée (miara miakatra)",
+  "dealSubtitle": "{date} • {result} • {ours} - {theirs}",
+  "@dealSubtitle": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "result": { "type": "String" },
+      "ours": { "type": "int" },
+      "theirs": { "type": "int" }
+    }
+  },
+
+  "infoTitle": "Informations",
+  "startTime": "Début",
+  "dealsCountLabel": "Donnes",
+  "dealsCount": "{count, plural, =0{Aucune donne} =1{1 donne} other{{count} donnes}}",
+  "@dealsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "ourTeamInfo": "Notre équipe",
+  "theirTeamInfo": "Équipe adverse",
+  "ourInitialScore": "Score initial (nous)",
+  "theirInitialScore": "Score initial (eux)",
+  "targetScore": "Score cible",
+  "activeRules": "Règles actives",
+  "yesLabel": "Oui",
+  "noLabel": "Non",
+  "betAmountLabel": "Oui ({amount} Ar)",
+  "@betAmountLabel": {
+    "placeholders": {
+      "amount": { "type": "int" }
+    }
+  },
+
+  "gameOverTitle": "Fin de partie",
+  "noFinishedGame": "Aucune partie terminée.",
+  "winner": "Vainqueur",
+  "draw": "Match nul",
+  "gameDate": "Date de la partie",
+  "historyButton": "HISTORIQUE DES DONNES",
+  "replayButton": "REJOUER",
+  "newGameButton": "NOUVELLE PARTIE",
+
+  "gamesHistoryTitle": "Historique",
+  "emptyGames": "Aucune partie",
+  "emptyGamesSubtitle": "Démarrez une nouvelle partie pour la voir ici.",
+  "gameSummary": "Score {our} - {their} • {count, plural, =0{0 donne} =1{1 donne} other{{count} donnes}}",
+  "@gameSummary": {
+    "placeholders": {
+      "our": { "type": "int" },
+      "their": { "type": "int" },
+      "count": { "type": "int" }
+    }
+  },
+
+  "version": "Version",
+  "versionValue": "2.0.0",
+  "developer": "Développé par",
+  "developerValue": "Solvers 2018"
+}

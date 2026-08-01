@@ -11,6 +11,7 @@ import 'package:score_beloty_2_0/features/game/domain/rules.dart';
 import 'package:score_beloty_2_0/features/game/domain/team.dart';
 import 'package:score_beloty_2_0/features/game/presentation/screens/deals_history_screen.dart';
 import 'package:score_beloty_2_0/features/game/presentation/widgets/suit_assets.dart';
+import 'package:score_beloty_2_0/l10n/generated/app_localizations.dart';
 
 Game _gameWithDeals(List<Deal> deals) {
   return Game.fresh(
@@ -40,9 +41,10 @@ Deal _deal({
 }
 
 class _SeededScreen extends ConsumerStatefulWidget {
-  const _SeededScreen({required this.game});
+  const _SeededScreen({required this.game, this.locale});
 
   final Game game;
+  final Locale? locale;
 
   @override
   ConsumerState<_SeededScreen> createState() => _SeededScreenState();
@@ -60,33 +62,71 @@ class _SeededScreenState extends ConsumerState<_SeededScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: DealsHistoryScreen());
+    return MaterialApp(
+      locale: widget.locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('fr'), Locale('en')],
+      home: const DealsHistoryScreen(),
+    );
   }
 }
 
-Widget _wrap(Game game) {
+Widget _wrap(Game game, {Locale locale = const Locale('fr')}) {
   return ProviderScope(
-    child: _SeededScreen(game: game),
+    child: _SeededScreen(game: game, locale: locale),
   );
 }
 
 void main() {
   setUpAll(() async {
     await initializeDateFormatting('fr_FR');
+    await initializeDateFormatting('en_US');
   });
 
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('renders an empty state when there are no deals',
+  testWidgets('renders an empty state when there are no deals (FR)',
       (tester) async {
     final game = _gameWithDeals(const <Deal>[]);
-    await tester.pumpWidget(_wrap(game));
+    String? emptyLabel;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('fr'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('fr'), Locale('en')],
+      home: Builder(
+        builder: (context) {
+          emptyLabel = AppLocalizations.of(context).noDealsRecorded;
+          return _wrap(game);
+        },
+      ),
+    ));
     await tester.pumpAndSettle();
 
-    expect(find.text('Aucune donne enregistrée pour cette partie.'),
-        findsOneWidget);
+    expect(emptyLabel, isNotNull);
+    expect(find.text(emptyLabel!), findsOneWidget);
+  });
+
+  testWidgets('renders an empty state when there are no deals (EN)',
+      (tester) async {
+    final game = _gameWithDeals(const <Deal>[]);
+    String? emptyLabel;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('fr'), Locale('en')],
+      home: Builder(
+        builder: (context) {
+          emptyLabel = AppLocalizations.of(context).noDealsRecorded;
+          return _wrap(game, locale: const Locale('en'));
+        },
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(emptyLabel, 'No deals recorded for this game.');
+    expect(find.text(emptyLabel!), findsOneWidget);
   });
 
   testWidgets('renders one deal tile per deal with a suit avatar',
@@ -113,24 +153,42 @@ void main() {
       ),
     ]);
 
+    String? spades;
+    String? hearts;
+    String? taShort;
+    String? won;
+    String? lost;
+    String? split;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('fr'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('fr'), Locale('en')],
+      home: Builder(
+        builder: (context) {
+          final l10n = AppLocalizations.of(context);
+          spades = l10n.contractShortSpades;
+          hearts = l10n.contractShortHearts;
+          taShort = l10n.contractShortAllTrumps;
+          won = l10n.resultWon;
+          lost = l10n.resultLost;
+          split = l10n.resultSplit;
+          return _wrap(game);
+        },
+      ),
+    ));
     await tester.binding.setSurfaceSize(const Size(600, 1400));
-    await tester.pumpWidget(_wrap(game));
     await tester.pumpAndSettle();
 
-    // Three suit avatars
     expect(find.byType(SuitIcon), findsNWidgets(3));
 
-    // Three deal titles with contract labels
-    expect(find.textContaining('Pique'), findsOneWidget);
-    expect(find.textContaining('Cœur'), findsOneWidget);
-    expect(find.textContaining('TA'), findsOneWidget);
+    expect(find.textContaining(spades!), findsOneWidget);
+    expect(find.textContaining(hearts!), findsOneWidget);
+    expect(find.textContaining(taShort!), findsOneWidget);
 
-    // Three result labels
-    expect(find.textContaining('On a gagné'), findsOneWidget);
-    expect(find.textContaining('Ils ont gagné'), findsOneWidget);
-    expect(find.textContaining('Partage'), findsOneWidget);
+    expect(find.textContaining(won!), findsOneWidget);
+    expect(find.textContaining(lost!), findsOneWidget);
+    expect(find.textContaining(split!), findsOneWidget);
 
-    // The tied deal shows the tie indicator
     expect(find.byIcon(Icons.compare_arrows), findsOneWidget);
   });
 
@@ -152,15 +210,25 @@ void main() {
       ),
     ]);
 
+    String? backTooltip;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('fr'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('fr'), Locale('en')],
+      home: Builder(
+        builder: (context) {
+          backTooltip = AppLocalizations.of(context).backTooltip;
+          return _wrap(game);
+        },
+      ),
+    ));
     await tester.binding.setSurfaceSize(const Size(600, 1400));
-    await tester.pumpWidget(_wrap(game));
     await tester.pumpAndSettle();
 
-    // The back button is rendered in the AppBar via a Tooltip-wrapped IconButton.
-    expect(find.byTooltip('Retour'), findsOneWidget);
+    expect(find.byTooltip(backTooltip!), findsOneWidget);
     expect(
       find.descendant(
-        of: find.byTooltip('Retour'),
+        of: find.byTooltip(backTooltip!),
         matching: find.byIcon(Icons.arrow_back),
       ),
       findsOneWidget,

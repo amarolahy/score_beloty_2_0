@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/deal.dart';
 import '../../domain/rules.dart';
 import '../../domain/scoring.dart';
@@ -84,18 +85,18 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
   void _validate() {
     final o = _oursValue;
     final t = _theirsValue;
+    final l10n = AppLocalizations.of(context);
     if (o == null || t == null) {
-      setState(() => _error = 'Valeurs invalides');
+      setState(() => _error = l10n.invalidValues);
       return;
     }
     if (o + t != _expectedTotal) {
       setState(() => _error =
-          'La somme doit valoir $_expectedTotal (saisie: ${o + t})');
+          l10n.sumMustBeLabel(_expectedTotal, o + t));
       return;
     }
     if (o > _maxSplit || t > _maxSplit) {
-      setState(() => _error =
-          'Maximum par équipe : $_maxSplit points');
+      setState(() => _error = l10n.maxPerTeamLabel(_maxSplit));
       return;
     }
     setState(() => _error = null);
@@ -113,15 +114,35 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
     Navigator.of(context).pop(outcome);
   }
 
+  String _contractLabel(AppLocalizations l10n) {
+    switch (widget.contract) {
+      case ContractType.allTrumps:
+        return l10n.contractAllTrumps;
+      case ContractType.noTrumps:
+        return l10n.contractNoTrumps;
+      case ContractType.spades:
+        return l10n.contractSpades;
+      case ContractType.hearts:
+        return l10n.contractHearts;
+      case ContractType.diamonds:
+        return l10n.contractDiamonds;
+      case ContractType.clubs:
+        return l10n.contractClubs;
+      case ContractType.error:
+        return l10n.contractError;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Partage'),
+        title: Text(l10n.splitTitle),
         actions: [
           IconButton(
-            tooltip: 'Inverser',
+            tooltip: l10n.invertTooltip,
             icon: const Icon(Icons.swap_horiz),
             onPressed: _swap,
           ),
@@ -134,24 +155,24 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Contrat : ${_contractLabel(widget.contract)}',
+                l10n.contractWithLabel(_contractLabel(l10n)),
                 style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               Text(
-                'Somme attendue : $_expectedTotal • Maximum par équipe : $_maxSplit',
+                l10n.expectedTotalLabel(_expectedTotal, _maxSplit),
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
               _SplitField(
                 controller: _ours,
-                label: 'Notre score',
+                label: l10n.ourScoreLabel,
                 accent: theme.colorScheme.primary,
               ),
               const SizedBox(height: 16),
               _SplitField(
                 controller: _theirs,
-                label: 'Leur score',
+                label: l10n.theirScoreLabel,
                 accent: theme.colorScheme.tertiary,
               ),
               if (_error != null) ...[
@@ -184,32 +205,13 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
               const Spacer(),
               FilledButton(
                 onPressed: _error == null ? _submit : null,
-                child: const Text('VALIDER'),
+                child: Text(l10n.validate),
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  String _contractLabel(ContractType c) {
-    switch (c) {
-      case ContractType.allTrumps:
-        return 'Tout atout';
-      case ContractType.noTrumps:
-        return 'Sans atout';
-      case ContractType.spades:
-        return 'Pique';
-      case ContractType.hearts:
-        return 'Cœur';
-      case ContractType.diamonds:
-        return 'Carreau';
-      case ContractType.clubs:
-        return 'Trèfle';
-      case ContractType.error:
-        return 'Erreur';
-    }
   }
 }
 

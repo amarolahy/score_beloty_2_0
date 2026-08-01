@@ -9,8 +9,9 @@ import 'package:score_beloty_2_0/features/game/domain/game.dart';
 import 'package:score_beloty_2_0/features/game/domain/rules.dart';
 import 'package:score_beloty_2_0/features/game/domain/team.dart';
 import 'package:score_beloty_2_0/features/game/presentation/screens/choose_contract_screen.dart';
+import 'package:score_beloty_2_0/l10n/generated/app_localizations.dart';
 
-Widget _harness({required Game game}) {
+Widget _harness({required Game game, Locale locale = const Locale('fr')}) {
   return ProviderScope(
     overrides: [
       sharedPreferencesProvider.overrideWith(
@@ -18,6 +19,9 @@ Widget _harness({required Game game}) {
       ),
     ],
     child: MaterialApp(
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: const [Locale('fr'), Locale('en')],
       home: Consumer(
         builder: (context, ref, _) {
           return Scaffold(
@@ -29,7 +33,6 @@ Widget _harness({required Game game}) {
   );
 }
 
-/// Wraps the screen in a stateful harness that seeds a current game.
 class ChooseContractScreenWithGame extends ConsumerStatefulWidget {
   const ChooseContractScreenWithGame({super.key, required this.game});
 
@@ -62,7 +65,7 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  testWidgets('choose contract renders six SVG suit tiles', (tester) async {
+  testWidgets('choose contract renders six SVG suit tiles (FR)', (tester) async {
     final game = Game.fresh(
       us: const Team(player1: 'A', player2: 'B'),
       them: const Team(player1: 'C', player2: 'D'),
@@ -72,15 +75,30 @@ void main() {
     await tester.pumpWidget(_harness(game: game));
     await tester.pumpAndSettle();
 
-    // Six suit labels rendered
-    expect(find.text('Tout atout'), findsOneWidget);
-    expect(find.text('Sans atout'), findsOneWidget);
-    expect(find.text('Pique'), findsOneWidget);
-    expect(find.text('Cœur'), findsOneWidget);
-    expect(find.text('Carreau'), findsOneWidget);
-    expect(find.text('Trèfle'), findsOneWidget);
+    final context = tester.element(find.byType(ChooseContractScreen));
+    final l10n = AppLocalizations.of(context);
 
-    // Six SvgPicture widgets loaded
+    expect(find.text(l10n.contractAllTrumps), findsOneWidget);
+    expect(find.text(l10n.contractNoTrumps), findsOneWidget);
+    expect(find.text(l10n.contractSpades), findsOneWidget);
+    expect(find.text(l10n.contractHearts), findsOneWidget);
+    expect(find.text(l10n.contractDiamonds), findsOneWidget);
+    expect(find.text(l10n.contractClubs), findsOneWidget);
+    expect(find.byType(SvgPicture), findsNWidgets(6));
+  });
+
+  testWidgets('choose contract renders six suit tiles (EN)', (tester) async {
+    final game = Game.fresh(
+      us: const Team(player1: 'A', player2: 'B'),
+      them: const Team(player1: 'C', player2: 'D'),
+      rules: const Rules(),
+    );
+
+    await tester.pumpWidget(_harness(game: game, locale: const Locale('en')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('All trumps'), findsOneWidget);
+    expect(find.text('Spades'), findsOneWidget);
     expect(find.byType(SvgPicture), findsNWidgets(6));
   });
 
@@ -92,27 +110,31 @@ void main() {
       rules: const Rules(),
     );
 
-    await tester.binding.setSurfaceSize(const Size(600, 1800));
+    String calculatedStake = '';
+    String spadesLabel = '';
     await tester.pumpWidget(_harness(game: game));
+    await tester.binding.setSurfaceSize(const Size(600, 1800));
     await tester.pumpAndSettle();
 
-    // Scroll the ListView so the preview is in view
+    final context = tester.element(find.byType(ChooseContractScreen));
+    final l10n = AppLocalizations.of(context);
+    calculatedStake = l10n.calculatedStake;
+    spadesLabel = l10n.contractSpades;
+
     await tester.scrollUntilVisible(
-      find.text('Mise calculée'),
+      find.text(calculatedStake),
       200,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
 
-    // Initial contract is AllTrumps → 26 points
     expect(find.text('26 points'), findsOneWidget);
 
-    // Tap "Pique" (16 base)
-    await tester.tap(find.text('Pique'));
+    await tester.tap(find.text(spadesLabel));
     await tester.pumpAndSettle();
 
     await tester.scrollUntilVisible(
-      find.text('Mise calculée'),
+      find.text(calculatedStake),
       200,
       scrollable: find.byType(Scrollable).first,
     );

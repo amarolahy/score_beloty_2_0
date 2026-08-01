@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/router.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/game.dart';
 
@@ -13,11 +14,12 @@ class GameOverScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(currentGameControllerProvider);
-    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final localeStr = Localizations.localeOf(context).toString();
 
     if (game == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Fin de partie')),
+        appBar: AppBar(title: Text(l10n.gameOverTitle)),
         body: const _MissingGameView(),
       );
     }
@@ -27,10 +29,10 @@ class GameOverScreen extends ConsumerWidget {
         ? '${game.us.player1} & ${game.us.player2}'
         : winner == Winner.them
             ? '${game.them.player1} & ${game.them.player2}'
-            : 'Match nul';
+            : l10n.draw;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Fin de partie')),
+      appBar: AppBar(title: Text(l10n.gameOverTitle)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -41,21 +43,21 @@ class GameOverScreen extends ConsumerWidget {
               Icon(
                 Icons.emoji_events,
                 size: 96,
-                color: theme.colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(height: 16),
               Text(
-                'Vainqueur',
+                l10n.winner,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 4),
               Text(
                 winnerName,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
               const SizedBox(height: 32),
               Card(
@@ -84,9 +86,9 @@ class GameOverScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Date de la partie'),
+                      Text(l10n.gameDate),
                       Text(
-                        DateFormat('dd/MM/yyyy HH:mm', 'fr_FR')
+                        DateFormat('dd/MM/yyyy HH:mm', localeStr)
                             .format(game.createdOn),
                       ),
                     ],
@@ -97,7 +99,7 @@ class GameOverScreen extends ConsumerWidget {
               FilledButton.icon(
                 onPressed: () => context.go(AppRoutes.dealsHistory),
                 icon: const Icon(Icons.list_alt),
-                label: const Text('HISTORIQUE DES DONNES'),
+                label: Text(l10n.historyButton),
               ),
               const SizedBox(height: 12),
               FilledButton.tonalIcon(
@@ -113,7 +115,7 @@ class GameOverScreen extends ConsumerWidget {
                   context.go(AppRoutes.chooseContract);
                 },
                 icon: const Icon(Icons.refresh),
-                label: const Text('REJOUER'),
+                label: Text(l10n.replayButton),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
@@ -122,7 +124,7 @@ class GameOverScreen extends ConsumerWidget {
                   context.go(AppRoutes.newGame);
                 },
                 icon: const Icon(Icons.add_circle_outline),
-                label: const Text('NOUVELLE PARTIE'),
+                label: Text(l10n.newGameButton),
               ),
             ],
           ),
@@ -137,6 +139,7 @@ class _MissingGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -145,11 +148,11 @@ class _MissingGameView extends StatelessWidget {
           children: [
             const Icon(Icons.info_outline, size: 56),
             const SizedBox(height: 12),
-            const Text('Aucune partie terminée.'),
+            Text(l10n.noFinishedGame),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => context.go(AppRoutes.newGame),
-              child: const Text('Nouvelle partie'),
+              child: Text(l10n.newGame),
             ),
           ],
         ),

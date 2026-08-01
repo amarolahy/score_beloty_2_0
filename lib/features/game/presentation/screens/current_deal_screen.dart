@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/deal.dart';
 import '../../domain/game.dart';
@@ -15,9 +16,10 @@ class CurrentDealScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(currentGameControllerProvider);
+    final l10n = AppLocalizations.of(context);
 
     if (game == null) {
-      return const _MissingGameView();
+      return _MissingGameView();
     }
     final deal = game.currentDeal;
     if (deal == null || deal.isFinished) {
@@ -31,7 +33,7 @@ class CurrentDealScreen extends ConsumerWidget {
           _DealHeader(game: game, deal: deal),
           const SizedBox(height: 24),
           Text(
-            'Résultat de la donne',
+            l10n.dealResultTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
@@ -43,10 +45,9 @@ class CurrentDealScreen extends ConsumerWidget {
 }
 
 class _MissingGameView extends StatelessWidget {
-  const _MissingGameView();
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -55,11 +56,11 @@ class _MissingGameView extends StatelessWidget {
           children: [
             const Icon(Icons.info_outline, size: 56),
             const SizedBox(height: 12),
-            const Text('Aucune partie en cours'),
+            Text(l10n.noCurrentGame),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => context.go(AppRoutes.newGame),
-              child: const Text('Nouvelle partie'),
+              child: Text(l10n.newGame),
             ),
           ],
         ),
@@ -73,6 +74,7 @@ class _MissingDealView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -81,14 +83,14 @@ class _MissingDealView extends StatelessWidget {
           children: [
             const Icon(Icons.style_outlined, size: 56),
             const SizedBox(height: 12),
-            const Text(
-              'Aucune donne en cours. Démarrez-en une nouvelle.',
+            Text(
+              l10n.noCurrentDeal,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () => context.go(AppRoutes.chooseContract),
-              child: const Text('Choisir un contrat'),
+              child: Text(l10n.chooseContractButton),
             ),
           ],
         ),
@@ -107,6 +109,7 @@ class _DealHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
     final total = ScoringEngine.computeTotal(
       contract: deal.contract,
       bid: deal.bid,
@@ -122,7 +125,7 @@ class _DealHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _contractLabel(deal.contract),
+              _contractLabel(l10n, deal.contract),
               style: theme.textTheme.headlineSmall?.copyWith(
                 color: scheme.onPrimaryContainer,
                 fontWeight: FontWeight.w700,
@@ -130,7 +133,7 @@ class _DealHeader extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              '${_bidLabel(deal.bid)} • ${_capotLabel(deal.capot)}',
+              '${_bidLabel(l10n, deal.bid)} • ${_capotLabel(l10n, deal.capot)}',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: scheme.onPrimaryContainer,
               ),
@@ -145,7 +148,7 @@ class _DealHeader extends StatelessWidget {
                   scheme: scheme,
                 ),
                 Text(
-                  '$total pts',
+                  l10n.pointsUnit(total),
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: scheme.onPrimaryContainer,
                     fontWeight: FontWeight.w800,
@@ -164,44 +167,44 @@ class _DealHeader extends StatelessWidget {
     );
   }
 
-  String _contractLabel(ContractType c) {
+  String _contractLabel(AppLocalizations l10n, ContractType c) {
     switch (c) {
       case ContractType.allTrumps:
-        return 'Tout atout';
+        return l10n.contractAllTrumps;
       case ContractType.noTrumps:
-        return 'Sans atout';
+        return l10n.contractNoTrumps;
       case ContractType.spades:
-        return 'Pique';
+        return l10n.contractSpades;
       case ContractType.hearts:
-        return 'Cœur';
+        return l10n.contractHearts;
       case ContractType.diamonds:
-        return 'Carreau';
+        return l10n.contractDiamonds;
       case ContractType.clubs:
-        return 'Trèfle';
+        return l10n.contractClubs;
       case ContractType.error:
-        return 'Erreur';
+        return l10n.contractError;
     }
   }
 
-  String _bidLabel(BidType b) {
+  String _bidLabel(AppLocalizations l10n, BidType b) {
     switch (b) {
       case BidType.pass:
-        return 'Passe';
+        return l10n.bidPass;
       case BidType.double_:
-        return 'Contré';
+        return l10n.bidDouble;
       case BidType.redouble:
-        return 'Surcontré';
+        return l10n.bidRedouble;
     }
   }
 
-  String _capotLabel(CapotType c) {
+  String _capotLabel(AppLocalizations l10n, CapotType c) {
     switch (c) {
       case CapotType.no:
-        return 'Aucun capot';
+        return l10n.capotNone;
       case CapotType.capot:
-        return 'Capot';
+        return l10n.capotCapot;
       case CapotType.capotInside:
-        return 'Capot dedans';
+        return l10n.capotInside;
     }
   }
 }
@@ -295,6 +298,7 @@ class _OutcomeActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final total = ScoringEngine.computeTotal(
       contract: deal.contract,
       bid: deal.bid,
@@ -309,20 +313,16 @@ class _OutcomeActions extends ConsumerWidget {
       children: [
         _OutcomeButton(
           icon: Icons.emoji_events,
-          label: 'On a gagné',
-          subtitle: '+$total points',
+          label: l10n.win,
+          subtitle: l10n.pointsDelta(total),
           color: Colors.green,
-          onTap: () => _applyOutcome(
-            context,
-            ref,
-            DealOutcome.usWin(total),
-          ),
+          onTap: () => _applyOutcome(context, ref, DealOutcome.usWin(total)),
         ),
         const SizedBox(height: 12),
         _OutcomeButton(
           icon: Icons.cancel,
-          label: 'Ils ont gagné',
-          subtitle: '+$total points pour eux',
+          label: l10n.lose,
+          subtitle: l10n.pointsDelta(total),
           color: Colors.red,
           onTap: () => _applyOutcome(
             context,
@@ -334,8 +334,8 @@ class _OutcomeActions extends ConsumerWidget {
           const SizedBox(height: 12),
           _OutcomeButton(
             icon: Icons.handshake,
-            label: 'Partage',
-            subtitle: 'Saisir les scores manuellement',
+            label: l10n.splitResult,
+            subtitle: l10n.splitSubtitle,
             color: Colors.orange,
             onTap: () => _openSplit(context, ref),
           ),
@@ -343,8 +343,8 @@ class _OutcomeActions extends ConsumerWidget {
         const SizedBox(height: 12),
         _OutcomeButton(
           icon: Icons.gavel,
-          label: 'Litige',
-          subtitle: 'Chaque camp conserve ses points',
+          label: l10n.litigation,
+          subtitle: l10n.litigationSubtitle,
           color: Colors.blueGrey,
           onTap: () => _applyOutcome(
             context,

@@ -1,0 +1,217 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Score Beloty",
+  "@appTitle": {
+    "description": "Application name shown in the AppBar and About screen."
+  },
+
+  "appSubtitle": "Score tracker for the Malagasy belote game.",
+  "@appSubtitle": {
+    "description": "Subtitle shown below the logo on the About screen."
+  },
+
+  "newGame": "New game",
+  "history": "History",
+  "about": "About",
+  "language": "Language",
+
+  "newGameTitle": "New game",
+  "newGameSubtitle": "Enter the players and the starting scores.",
+  "ourTeam": "Our team",
+  "theirTeam": "Opponents",
+  "player1": "Player 1",
+  "player2": "Player 2",
+  "initialScore": "Starting score",
+  "requiredField": "Required field",
+  "invalidScore": "Invalid score",
+  "advancedRules": "Advanced rules",
+  "defaultRules": "Default settings",
+  "customRules": "Custom",
+  "startButton": "START",
+
+  "ruleFinalScore": "Target score",
+  "ruleSplitAllTrumps": "Split allowed (All trumps)",
+  "ruleSplitNoTrumps": "Split allowed (No trumps)",
+  "ruleSplitColor": "Split allowed (Suit)",
+  "ruleContinueOnTie": "Miara miakatra (continue on tie)",
+  "ruleStepsOnTie": "Tie step",
+  "rulePointIfError": "Points on error",
+  "rulePointOnError": "Points awarded on error",
+  "ruleWinIfCapotInside": "Win if capot inside",
+  "ruleRedoubleNoTrumps": "Redouble without trump",
+  "ruleBet": "Side bet enabled",
+  "ruleBetAmount": "Bet amount (Ar)",
+  "ruleDoubleAmountOnCapotScore": "Double the bet on capot",
+
+  "contractLabel": "Contract",
+  "bidLabel": "Bid",
+  "capotLabel": "Capot",
+
+  "contractAllTrumps": "All trumps",
+  "contractNoTrumps": "No trumps",
+  "contractSpades": "Spades",
+  "contractHearts": "Hearts",
+  "contractDiamonds": "Diamonds",
+  "contractClubs": "Clubs",
+  "contractError": "Error",
+  "contractShortAllTrumps": "AT",
+  "contractShortNoTrumps": "NT",
+  "contractShortSpades": "Spades",
+  "contractShortHearts": "Hearts",
+  "contractShortDiamonds": "Diamonds",
+  "contractShortClubs": "Clubs",
+  "contractShortError": "—",
+
+  "bidPass": "Pass",
+  "bidDouble": "Double",
+  "bidRedouble": "Redouble",
+
+  "capotNone": "None",
+  "capotCapot": "Capot",
+  "capotInside": "Inside",
+
+  "calculatedStake": "Calculated stake",
+  "splitAllowed": "Split allowed",
+  "pointsUnit": "{points} points",
+  "@pointsUnit": {
+    "description": "Displayed total for a deal.",
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "startDealButton": "START THE DEAL",
+  "cancelLastDealButton": "Cancel last deal",
+  "cancelLastDealDialogTitle": "Cancel the last deal",
+  "cancelLastDealDialogMessage": "The previous deal will be removed. Continue?",
+  "backAction": "Back",
+  "cancelAction": "Cancel",
+  "okAction": "OK",
+  "noCurrentGame": "No game in progress",
+  "target": "Target: {score}",
+  "@target": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "dealResultTitle": "Deal outcome",
+  "win": "We won",
+  "lose": "They won",
+  "splitResult": "Split",
+  "litigation": "Litigation",
+  "splitSubtitle": "Enter the scores manually",
+  "litigationSubtitle": "Both sides keep their points",
+  "noCurrentDeal": "No deal in progress. Start a new one.",
+  "chooseContractButton": "Pick a contract",
+
+  "pointsDelta": "+{points} points",
+  "@pointsDelta": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+
+  "splitTitle": "Split",
+  "contractWithLabel": "Contract: {contract}",
+  "@contractWithLabel": {
+    "placeholders": {
+      "contract": { "type": "String" }
+    }
+  },
+  "expectedTotalLabel": "Expected total: {total} • Max per team: {max}",
+  "@expectedTotalLabel": {
+    "placeholders": {
+      "total": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "ourScoreLabel": "Our score",
+  "theirScoreLabel": "Their score",
+  "invertTooltip": "Swap",
+  "invalidValues": "Invalid values",
+  "sumMustBeLabel": "The sum must be {expected} (entered: {actual})",
+  "@sumMustBeLabel": {
+    "placeholders": {
+      "expected": { "type": "int" },
+      "actual": { "type": "int" }
+    }
+  },
+  "maxPerTeamLabel": "Max per team: {max} points",
+  "@maxPerTeamLabel": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "validate": "VALIDATE",
+
+  "dealsHistoryTitle": "Deals history",
+  "noDealsRecorded": "No deals recorded for this game.",
+  "noGameInProgress": "No game in progress.",
+  "backTooltip": "Back",
+  "resultWon": "We won",
+  "resultLost": "They won",
+  "resultSplit": "Split",
+  "resultLitigation": "Litigation",
+  "resultPending": "Pending",
+  "tieTooltip": "Tie applied (miara miakatra)",
+  "dealSubtitle": "{date} • {result} • {ours} - {theirs}",
+  "@dealSubtitle": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "result": { "type": "String" },
+      "ours": { "type": "int" },
+      "theirs": { "type": "int" }
+    }
+  },
+
+  "infoTitle": "Information",
+  "startTime": "Started",
+  "dealsCountLabel": "Deals",
+  "dealsCount": "{count, plural, =0{No deals} =1{1 deal} other{{count} deals}}",
+  "@dealsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "ourTeamInfo": "Our team",
+  "theirTeamInfo": "Opponents",
+  "ourInitialScore": "Starting score (us)",
+  "theirInitialScore": "Starting score (them)",
+  "targetScore": "Target score",
+  "activeRules": "Active rules",
+  "yesLabel": "Yes",
+  "noLabel": "No",
+  "betAmountLabel": "Yes ({amount} Ar)",
+  "@betAmountLabel": {
+    "placeholders": {
+      "amount": { "type": "int" }
+    }
+  },
+
+  "gameOverTitle": "Game over",
+  "noFinishedGame": "No finished game.",
+  "winner": "Winner",
+  "draw": "Draw",
+  "gameDate": "Game date",
+  "historyButton": "DEALS HISTORY",
+  "replayButton": "PLAY AGAIN",
+  "newGameButton": "NEW GAME",
+
+  "gamesHistoryTitle": "History",
+  "emptyGames": "No games yet",
+  "emptyGamesSubtitle": "Start a new game to see it here.",
+  "gameSummary": "Score {our} - {their} • {count, plural, =0{0 deals} =1{1 deal} other{{count} deals}}",
+  "@gameSummary": {
+    "placeholders": {
+      "our": { "type": "int" },
+      "their": { "type": "int" },
+      "count": { "type": "int" }
+    }
+  },
+
+  "version": "Version",
+  "versionValue": "2.0.0",
+  "developer": "Developed by",
+  "developerValue": "Solvers 2018"
+}
