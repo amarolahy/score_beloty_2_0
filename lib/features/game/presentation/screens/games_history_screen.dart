@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/router.dart';
 import '../../../../l10n/generated/app_localizations.dart';
@@ -84,9 +85,7 @@ class _EmptyState extends StatelessWidget {
             Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 24),
             FilledButton.icon(
-              onPressed: () => Navigator.of(context).pushReplacementNamed(
-                AppRoutes.newGame,
-              ),
+              onPressed: () => context.go(AppRoutes.newGame),
               icon: const Icon(Icons.add_circle_outline),
               label: Text(AppLocalizations.of(context).newGame),
             ),
