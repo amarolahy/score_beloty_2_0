@@ -24,9 +24,12 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
   BidType _bid = BidType.pass;
   CapotType _capot = CapotType.no;
 
-  static const List<ContractType> _order = [
+  static const List<ContractType> _trumpsOrder = [
     ContractType.allTrumps,
     ContractType.noTrumps,
+  ];
+
+  static const List<ContractType> _suitsOrder = [
     ContractType.spades,
     ContractType.hearts,
     ContractType.diamonds,
@@ -94,9 +97,20 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
           Text(l10n.contractLabel, style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
           _ContractSelector(
-            contracts: _order,
+            contracts: _trumpsOrder,
             labels: _contractLabels(l10n),
             selected: _contract,
+            crossAxisCount: 2,
+            childAspectRatio: 2,
+            onChanged: (c) => setState(() => _contract = c),
+          ),
+          const SizedBox(height: 12),
+          _ContractSelector(
+            contracts: _suitsOrder,
+            labels: _contractLabels(l10n),
+            selected: _contract,
+            crossAxisCount: 4,
+            childAspectRatio: 0.85,
             onChanged: (c) => setState(() => _contract = c),
           ),
           const SizedBox(height: 24),
@@ -254,23 +268,27 @@ class _ContractSelector extends StatelessWidget {
     required this.contracts,
     required this.labels,
     required this.selected,
+    required this.crossAxisCount,
+    required this.childAspectRatio,
     required this.onChanged,
   });
 
   final List<ContractType> contracts;
   final Map<ContractType, String> labels;
   final ContractType selected;
+  final int crossAxisCount;
+  final double childAspectRatio;
   final ValueChanged<ContractType> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: 3,
+      crossAxisCount: crossAxisCount,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
-      childAspectRatio: 1.2,
+      childAspectRatio: childAspectRatio,
       children: [
         for (final type in contracts)
           _ContractTile(
