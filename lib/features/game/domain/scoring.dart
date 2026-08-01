@@ -88,6 +88,61 @@ class ScoringEngine {
   }
 }
 
+/// Rules that govern how a deal's trick points are split between the two
+/// teams when neither side clearly wins or loses the contract.
+///
+/// A [ContractSplit] is a pure domain object: the values are defined by the
+/// Malagasy belote rules and do not depend on user-configurable [Rules].
+class ContractSplit {
+  const ContractSplit({
+    required this.total,
+    required this.maxPerTeam,
+    required this.defaultShare,
+  });
+
+  /// Total points both shares must sum to.
+  final int total;
+
+  /// Maximum points a single team may keep for itself.
+  final int maxPerTeam;
+
+  /// Default `(ours, theirs)` share pre-filled in the split modal.
+  final (int, int) defaultShare;
+
+  /// Returns the [ContractSplit] for the given [contract].
+  static ContractSplit of(ContractType contract) {
+    switch (contract) {
+      case ContractType.allTrumps:
+        return const ContractSplit(
+          total: 26,
+          maxPerTeam: 18,
+          defaultShare: (14, 12),
+        );
+      case ContractType.noTrumps:
+        return const ContractSplit(
+          total: 52,
+          maxPerTeam: 35,
+          defaultShare: (27, 25),
+        );
+      case ContractType.error:
+        return const ContractSplit(
+          total: 16,
+          maxPerTeam: 0,
+          defaultShare: (0, 0),
+        );
+      case ContractType.spades:
+      case ContractType.hearts:
+      case ContractType.diamonds:
+      case ContractType.clubs:
+        return const ContractSplit(
+          total: 16,
+          maxPerTeam: 11,
+          defaultShare: (9, 7),
+        );
+    }
+  }
+}
+
 class DealOutcome {
   const DealOutcome({
     required this.result,

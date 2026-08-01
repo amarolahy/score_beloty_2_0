@@ -3,51 +3,25 @@ import 'package:flutter/services.dart';
 
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/deal.dart';
-import '../../domain/rules.dart';
 import '../../domain/scoring.dart';
 
 class ModalSplitScoreScreen extends StatefulWidget {
   const ModalSplitScoreScreen({
     super.key,
     required this.contract,
-    required this.rules,
   });
 
   final ContractType contract;
-  final Rules rules;
 
   @override
   State<ModalSplitScoreScreen> createState() => _ModalSplitScoreScreenState();
 }
 
 class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
+  late final ContractSplit _split;
   late final TextEditingController _ours;
   late final TextEditingController _theirs;
   String? _error;
-
-  int get _maxSplit {
-    switch (widget.contract) {
-      case ContractType.allTrumps:
-        return 18;
-      case ContractType.noTrumps:
-        return 35;
-      case ContractType.error:
-        return 0;
-      default:
-        return 11;
-    }
-  }
-
-  int get _expectedTotal {
-    switch (widget.contract) {
-      case ContractType.allTrumps:
-        return 26;
-      case ContractType.noTrumps:
-        return 52;
-      default:
-        return 16;
-    }
-  }
 
   int? get _oursValue => int.tryParse(_ours.text);
   int? get _theirsValue => int.tryParse(_theirs.text);
@@ -55,9 +29,9 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
   @override
   void initState() {
     super.initState();
-    final defaults = _defaultsFor(widget.contract);
-    _ours = TextEditingController(text: defaults.$1.toString());
-    _theirs = TextEditingController(text: defaults.$2.toString());
+    _split = ContractSplit.of(widget.contract);
+    _ours = TextEditingController(text: _split.defaultShare.$1.toString());
+    _theirs = TextEditingController(text: _split.defaultShare.$2.toString());
     _ours.addListener(_validate);
     _theirs.addListener(_validate);
   }
@@ -69,19 +43,6 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
     super.dispose();
   }
 
-  (int, int) _defaultsFor(ContractType contract) {
-    switch (contract) {
-      case ContractType.allTrumps:
-        return (14, 12);
-      case ContractType.noTrumps:
-        return (27, 25);
-      case ContractType.error:
-        return (0, 0);
-      default:
-        return (9, 7);
-    }
-  }
-
   void _validate() {
     final o = _oursValue;
     final t = _theirsValue;
@@ -90,13 +51,13 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
       setState(() => _error = l10n.invalidValues);
       return;
     }
-    if (o + t != _expectedTotal) {
+    if (o + t != _split.total) {
       setState(() => _error =
-          l10n.sumMustBeLabel(_expectedTotal, o + t));
+          l10n.sumMustBeLabel(_split.total, o + t));
       return;
     }
-    if (o > _maxSplit || t > _maxSplit) {
-      setState(() => _error = l10n.maxPerTeamLabel(_maxSplit));
+    if (o > _split.maxPerTeam || t > _split.maxPerTeam) {
+      setState(() => _error = l10n.maxPerTeamLabel(_split.maxPerTeam));
       return;
     }
     setState(() => _error = null);
@@ -160,7 +121,7 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                l10n.expectedTotalLabel(_expectedTotal, _maxSplit),
+                l10n.expectedTotalLabel(_split.total, _split.maxPerTeam),
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),

@@ -256,4 +256,56 @@ void main() {
       expect(deal.isFinished, isTrue);
     });
   });
+
+  group('ContractSplit.of', () {
+    test('all trumps split total is 26, maxPerTeam 18, defaults (14, 12)', () {
+      final s = ContractSplit.of(ContractType.allTrumps);
+      expect(s.total, 26);
+      expect(s.maxPerTeam, 18);
+      expect(s.defaultShare, (14, 12));
+    });
+
+    test('no trumps split total is 52, maxPerTeam 35, defaults (27, 25)', () {
+      final s = ContractSplit.of(ContractType.noTrumps);
+      expect(s.total, 52);
+      expect(s.maxPerTeam, 35);
+      expect(s.defaultShare, (27, 25));
+    });
+
+    test('error split is unusable (total 16, maxPerTeam 0, defaults (0, 0))',
+        () {
+      final s = ContractSplit.of(ContractType.error);
+      expect(s.total, 16);
+      expect(s.maxPerTeam, 0);
+      expect(s.defaultShare, (0, 0));
+    });
+
+    test('suit contracts share total 16, maxPerTeam 11, defaults (9, 7)', () {
+      for (final c in [
+        ContractType.spades,
+        ContractType.hearts,
+        ContractType.diamonds,
+        ContractType.clubs,
+      ]) {
+        final s = ContractSplit.of(c);
+        expect(s.total, 16, reason: 'total for $c');
+        expect(s.maxPerTeam, 11, reason: 'maxPerTeam for $c');
+        expect(s.defaultShare, (9, 7), reason: 'defaultShare for $c');
+      }
+    });
+
+    test('default share always sums to total and respects maxPerTeam', () {
+      for (final c in ContractType.values) {
+        final s = ContractSplit.of(c);
+        final (o, t) = s.defaultShare;
+        // The "error" contract is intentionally unusable (maxPerTeam = 0),
+        // so its default share does not need to sum to the total.
+        if (c != ContractType.error) {
+          expect(o + t, s.total, reason: 'defaultShare sum for $c');
+        }
+        expect(o <= s.maxPerTeam, isTrue, reason: 'ours <= maxPerTeam for $c');
+        expect(t <= s.maxPerTeam, isTrue, reason: 'theirs <= maxPerTeam for $c');
+      }
+    });
+  });
 }

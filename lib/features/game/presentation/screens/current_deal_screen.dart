@@ -286,7 +286,6 @@ class _OutcomeActions extends ConsumerWidget {
       MaterialPageRoute(
         builder: (_) => ModalSplitScoreScreen(
           contract: deal.contract,
-          rules: game.rules,
         ),
         fullscreenDialog: true,
       ),
