@@ -26,6 +26,22 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
   int? get _oursValue => int.tryParse(_ours.text);
   int? get _theirsValue => int.tryParse(_theirs.text);
 
+  bool get _canIncrementOurs =>
+      (_oursValue ?? 0) < _split.maxPerTeam &&
+      (_theirsValue ?? 0) > 0;
+
+  bool get _canDecrementOurs =>
+      (_oursValue ?? 0) > 0 &&
+      (_theirsValue ?? 0) < _split.maxPerTeam;
+
+  bool get _canIncrementTheirs =>
+      (_theirsValue ?? 0) < _split.maxPerTeam &&
+      (_oursValue ?? 0) > 0;
+
+  bool get _canDecrementTheirs =>
+      (_theirsValue ?? 0) > 0 &&
+      (_oursValue ?? 0) < _split.maxPerTeam;
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +77,22 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
       return;
     }
     setState(() => _error = null);
+  }
+
+  void _transfer(int delta, {required bool toOurs}) {
+    final o = _oursValue;
+    final t = _theirsValue;
+    if (o == null || t == null) return;
+    final newOurs = toOurs ? o + delta : o - delta;
+    final newTheirs = toOurs ? t - delta : t + delta;
+    if (newOurs < 0 ||
+        newOurs > _split.maxPerTeam ||
+        newTheirs < 0 ||
+        newTheirs > _split.maxPerTeam) {
+      return;
+    }
+    _ours.text = newOurs.toString();
+    _theirs.text = newTheirs.toString();
   }
 
   void _swap() {
@@ -125,16 +157,26 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
-              _SplitField(
-                controller: _ours,
+              _ScoreStepper(
+                key: const ValueKey('ours-stepper'),
                 label: l10n.ourScoreLabel,
+                controller: _ours,
                 accent: theme.colorScheme.primary,
+                canDecrement: _canDecrementOurs,
+                canIncrement: _canIncrementOurs,
+                onDecrement: () => _transfer(1, toOurs: false),
+                onIncrement: () => _transfer(1, toOurs: true),
               ),
               const SizedBox(height: 16),
-              _SplitField(
-                controller: _theirs,
+              _ScoreStepper(
+                key: const ValueKey('theirs-stepper'),
                 label: l10n.theirScoreLabel,
+                controller: _theirs,
                 accent: theme.colorScheme.tertiary,
+                canDecrement: _canDecrementTheirs,
+                canIncrement: _canIncrementTheirs,
+                onDecrement: () => _transfer(1, toOurs: true),
+                onIncrement: () => _transfer(1, toOurs: false),
               ),
               if (_error != null) ...[
                 const SizedBox(height: 12),
@@ -176,30 +218,73 @@ class _ModalSplitScoreScreenState extends State<ModalSplitScoreScreen> {
   }
 }
 
-class _SplitField extends StatelessWidget {
-  const _SplitField({
-    required this.controller,
+class _ScoreStepper extends StatelessWidget {
+  const _ScoreStepper({
+    super.key,
     required this.label,
+    required this.controller,
     required this.accent,
+    required this.canDecrement,
+    required this.canIncrement,
+    required this.onDecrement,
+    required this.onIncrement,
   });
 
-  final TextEditingController controller;
   final String label;
+  final TextEditingController controller;
   final Color accent;
+  final bool canDecrement;
+  final bool canIncrement;
+  final VoidCallback onDecrement;
+  final VoidCallback onIncrement;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(Icons.scoreboard_outlined, color: accent),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 12),
+          Icon(Icons.scoreboard_outlined, color: accent),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+          IconButton(
+            tooltip: '-1',
+            icon: const Icon(Icons.remove_circle_outline),
+            color: accent,
+            onPressed: canDecrement ? onDecrement : null,
+          ),
+          SizedBox(
+            width: 64,
+            child: TextField(
+              controller: controller,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 14),
+              ),
+            ),
+          ),
+          IconButton(
+            tooltip: '+1',
+            icon: const Icon(Icons.add_circle_outline),
+            color: accent,
+            onPressed: canIncrement ? onIncrement : null,
+          ),
+          const SizedBox(width: 12),
+        ],
       ),
     );
   }
