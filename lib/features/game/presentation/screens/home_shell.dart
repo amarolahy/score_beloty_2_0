@@ -18,11 +18,6 @@ class HomeShell extends StatelessWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Semantics(
-              label: 'Logo Score Beloty',
-              child: Image.asset(logoAsset, height: 32),
-            ),
-            const SizedBox(width: 12),
             const Flexible(
               child: Text(
                 'Score Beloty',
