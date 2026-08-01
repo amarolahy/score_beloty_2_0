@@ -341,6 +341,10 @@ class _ContractTile extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 label,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   color: fg,
