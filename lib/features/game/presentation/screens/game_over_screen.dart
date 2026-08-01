@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/router.dart';
+import '../../../../core/intl.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/game.dart';
@@ -15,7 +15,7 @@ class GameOverScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(currentGameControllerProvider);
     final l10n = AppLocalizations.of(context);
-    final localeStr = Localizations.localeOf(context).toString();
+    final locale = Localizations.localeOf(context);
 
     if (game == null) {
       return Scaffold(
@@ -88,8 +88,7 @@ class GameOverScreen extends ConsumerWidget {
                     children: [
                       Text(l10n.gameDate),
                       Text(
-                        DateFormat('dd/MM/yyyy HH:mm', localeStr)
-                            .format(game.createdOn),
+                        AppDateFormat.formatLongDate(game.createdOn, locale),
                       ),
                     ],
                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
+import '../../../../core/intl.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 
@@ -18,14 +18,19 @@ class GameInfoScreen extends ConsumerWidget {
         body: Center(child: Text(l10n.noGameInProgress)),
       );
     }
-    final dateFormat = DateFormat('EEE dd/MM/yy HH:mm', Localizations.localeOf(context).toString());
     return Scaffold(
       appBar: AppBar(title: Text(l10n.infoTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _InfoTile(label: l10n.startTime, value: dateFormat.format(game.createdOn)),
+            _InfoTile(
+              label: l10n.startTime,
+              value: AppDateFormat.formatGameDate(
+                game.createdOn,
+                Localizations.localeOf(context),
+              ),
+            ),
             _InfoTile(label: l10n.dealsCountLabel, value: l10n.dealsCount(game.deals.length)),
             _InfoTile(
               label: l10n.ourTeamInfo,

@@ -209,6 +209,9 @@
       "count": { "type": "int" }
     }
   },
+  "historyLoadError": "Unable to load history",
+  "historyStorageError": "Storage unavailable",
+  "retryAction": "Retry",
 
   "version": "Version",
   "versionValue": "2.0.0",

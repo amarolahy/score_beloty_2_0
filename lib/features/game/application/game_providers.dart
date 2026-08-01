@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/result.dart';
 import '../data/game_repository.dart';
 import '../data/game_storage.dart';
 import '../domain/game.dart';
@@ -19,22 +20,27 @@ final gameRepositoryProvider = Provider<GameRepository>((ref) {
   return GameRepository(ref.watch(gameStorageProvider));
 });
 
+T _unwrap<T>(SealedResult<T> result) {
+  if (result is Success<T>) return result.value;
+  final failure = result as Failure<T>;
+  throw failure.cause ?? Exception(failure.message);
+}
+
 class GamesHistoryController extends AsyncNotifier<List<Game>> {
   @override
   Future<List<Game>> build() async {
-    final repo = ref.watch(gameRepositoryProvider);
-    return repo.getAll();
+    return _unwrap(await ref.read(gameRepositoryProvider).getAll());
   }
 
   Future<void> refresh() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => ref.read(gameRepositoryProvider).getAll(),
-    );
+    state = await AsyncValue.guard(() async {
+      return _unwrap(await ref.read(gameRepositoryProvider).getAll());
+    });
   }
 
   Future<void> remove(Game game) async {
-    await ref.read(gameRepositoryProvider).delete(game.createdOn);
+    _unwrap(await ref.read(gameRepositoryProvider).delete(game.createdOn));
     await refresh();
   }
 }
@@ -61,7 +67,7 @@ class CurrentGameController extends Notifier<Game?> {
   Future<void> persist() async {
     final current = state;
     if (current == null) return;
-    await ref.read(gameRepositoryProvider).save(current);
+    _unwrap(await ref.read(gameRepositoryProvider).save(current));
     await ref.read(gamesHistoryControllerProvider.notifier).refresh();
   }
 
@@ -71,7 +77,7 @@ class CurrentGameController extends Notifier<Game?> {
     final next = current.removeLastDeal();
     if (next == null) return;
     state = next;
-    await ref.read(gameRepositoryProvider).save(next);
+    _unwrap(await ref.read(gameRepositoryProvider).save(next));
   }
 
   void clear() {

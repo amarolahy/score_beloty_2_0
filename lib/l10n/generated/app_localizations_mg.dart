@@ -418,6 +418,15 @@ class AppLocalizationsMg extends AppLocalizations {
   }
 
   @override
+  String get historyLoadError => 'Tsy afaka ampidirina ny tantara';
+
+  @override
+  String get historyStorageError => 'Tsy misy fitehirizana';
+
+  @override
+  String get retryAction => 'Andraso indray';
+
+  @override
   String get version => 'Version';
 
   @override

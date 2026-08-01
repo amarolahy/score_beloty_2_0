@@ -210,6 +210,9 @@
       "count": { "type": "int" }
     }
   },
+  "historyLoadError": "Impossible de charger l'historique",
+  "historyStorageError": "Stockage indisponible",
+  "retryAction": "Réessayer",
 
   "version": "Version",
   "versionValue": "2.0.0",

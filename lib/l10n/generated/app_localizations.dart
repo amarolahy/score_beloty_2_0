@@ -838,6 +838,24 @@ abstract class AppLocalizations {
   /// **'Score {our} - {their} • {count, plural, =0{0 donne} =1{1 donne} other{{count} donnes}}'**
   String gameSummary(int our, int their, int count);
 
+  /// No description provided for @historyLoadError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de charger l\'historique'**
+  String get historyLoadError;
+
+  /// No description provided for @historyStorageError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stockage indisponible'**
+  String get historyStorageError;
+
+  /// No description provided for @retryAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get retryAction;
+
   /// No description provided for @version.
   ///
   /// In fr, this message translates to:

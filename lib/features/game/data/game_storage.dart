@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/failures.dart';
+import '../../../core/result.dart';
 import '../domain/game.dart';
 
 class GameStorage {
@@ -11,27 +13,47 @@ class GameStorage {
 
   final SharedPreferences _prefs;
 
-  Future<List<Game>> loadAll() async {
+  /// Reads every stored game. Corrupted JSON entries are silently skipped so
+  /// the rest of the data remains usable; only platform-level errors
+  /// (prefs unavailable, etc.) surface as [Failure].
+  Future<SealedResult<List<Game>>> loadAll() async {
     final raw = _prefs.getStringList(storageKey);
-    if (raw == null) return <Game>[];
+    if (raw == null) return const Success(<Game>[]);
+
     final games = <Game>[];
     for (final entry in raw) {
       try {
         final json = jsonDecode(entry) as Map<String, dynamic>;
         games.add(Game.fromJson(json));
       } catch (_) {
-        // Skip corrupted entries silently; we could log instead.
+        // Skip corrupted entries silently.
       }
     }
-    return games;
+    return Success(games);
   }
 
-  Future<void> saveAll(List<Game> games) async {
-    final serialized = games.map((g) => jsonEncode(g.toJson())).toList();
-    await _prefs.setStringList(storageKey, serialized);
+  Future<SealedResult<void>> saveAll(List<Game> games) async {
+    try {
+      final serialized = games.map((g) => jsonEncode(g.toJson())).toList();
+      await _prefs.setStringList(storageKey, serialized);
+      return const Success(null);
+    } catch (e) {
+      return Failure<void>(
+        'Failed to save games',
+        cause: PreferencesUnavailable(cause: e),
+      );
+    }
   }
 
-  Future<void> clear() async {
-    await _prefs.remove(storageKey);
+  Future<SealedResult<void>> clear() async {
+    try {
+      await _prefs.remove(storageKey);
+      return const Success(null);
+    } catch (e) {
+      return Failure<void>(
+        'Failed to clear storage',
+        cause: PreferencesUnavailable(cause: e),
+      );
+    }
   }
 }

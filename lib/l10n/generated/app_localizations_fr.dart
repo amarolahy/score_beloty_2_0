@@ -418,6 +418,15 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get historyLoadError => 'Impossible de charger l\'historique';
+
+  @override
+  String get historyStorageError => 'Stockage indisponible';
+
+  @override
+  String get retryAction => 'Réessayer';
+
+  @override
   String get version => 'Version';
 
   @override

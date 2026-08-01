@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/router.dart';
+import '../../../../core/intl.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 import '../../domain/deal.dart';
@@ -76,8 +76,7 @@ class _DealsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final dateFormat =
-        DateFormat('EEE dd/MM HH:mm', Localizations.localeOf(context).toString());
+    final locale = Localizations.localeOf(context);
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: deals.length,
@@ -96,7 +95,7 @@ class _DealsList extends StatelessWidget {
             ),
             subtitle: Text(
               l10n.dealSubtitle(
-                dateFormat.format(deal.beginAt),
+                AppDateFormat.formatDealDate(deal.beginAt, locale),
                 _resultLabel(l10n, deal.result),
                 deal.ourPoints,
                 deal.theirPoints,

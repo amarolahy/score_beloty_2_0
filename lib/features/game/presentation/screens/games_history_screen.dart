@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router.dart';
+import '../../../../core/failures.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../application/game_providers.dart';
 
@@ -16,7 +17,11 @@ class GamesHistoryScreen extends ConsumerWidget {
     return SafeArea(
       child: games.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (error, _) => _ErrorState(
+          error: error,
+          onRetry: () =>
+              ref.read(gamesHistoryControllerProvider.notifier).refresh(),
+        ),
         data: (list) {
           if (list.isEmpty) {
             return _EmptyState(
@@ -88,6 +93,51 @@ class _EmptyState extends StatelessWidget {
               onPressed: () => context.go(AppRoutes.newGame),
               icon: const Icon(Icons.add_circle_outline),
               label: Text(AppLocalizations.of(context).newGame),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.error, required this.onRetry});
+
+  final Object error;
+  final VoidCallback onRetry;
+
+  bool get _isStorageFailure =>
+      error is PreferencesUnavailable || error is CorruptedEntry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              _isStorageFailure ? Icons.cloud_off : Icons.error_outline,
+              size: 64,
+              color: theme.colorScheme.error,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              _isStorageFailure
+                  ? l10n.historyStorageError
+                  : l10n.historyLoadError,
+              style: theme.textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            FilledButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+              label: Text(l10n.retryAction),
             ),
           ],
         ),

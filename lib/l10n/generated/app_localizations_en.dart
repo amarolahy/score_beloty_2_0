@@ -415,6 +415,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get historyLoadError => 'Unable to load history';
+
+  @override
+  String get historyStorageError => 'Storage unavailable';
+
+  @override
+  String get retryAction => 'Retry';
+
+  @override
   String get version => 'Version';
 
   @override

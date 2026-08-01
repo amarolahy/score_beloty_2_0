@@ -210,6 +210,9 @@
       "count": { "type": "int" }
     }
   },
+  "historyLoadError": "Tsy afaka ampidirina ny tantara",
+  "historyStorageError": "Tsy misy fitehirizana",
+  "retryAction": "Andraso indray",
 
   "version": "Version",
   "versionValue": "2.0.0",
