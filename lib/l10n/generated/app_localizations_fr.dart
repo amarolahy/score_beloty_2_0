@@ -157,7 +157,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get contractShortError => '—';
 
   @override
-  String get bidPass => 'Passe';
+  String get bidPass => 'Bonne';
 
   @override
   String get bidDouble => 'Contré';

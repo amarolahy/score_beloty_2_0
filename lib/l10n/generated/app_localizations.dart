@@ -397,7 +397,7 @@ abstract class AppLocalizations {
   /// No description provided for @bidPass.
   ///
   /// In fr, this message translates to:
-  /// **'Passe'**
+  /// **'Bonne'**
   String get bidPass;
 
   /// No description provided for @bidDouble.
