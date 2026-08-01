@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../app/router.dart';
 import '../../application/game_providers.dart';
 import '../../domain/deal.dart';
+import '../../domain/game.dart';
+import '../widgets/suit_assets.dart';
 
 class DealsHistoryScreen extends ConsumerWidget {
   const DealsHistoryScreen({super.key});
@@ -11,61 +15,99 @@ class DealsHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(currentGameControllerProvider);
-    if (game == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Historique des donnes')),
-        body: const Center(child: Text('Aucune partie en cours.')),
-      );
-    }
-    if (game.deals.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Historique des donnes')),
-        body: const Center(
-          child: Padding(
-            padding: EdgeInsets.all(24),
-            child: Text(
-              'Aucune donne enregistrée pour cette partie.',
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      );
-    }
-
-    final dateFormat = DateFormat('EEE dd/MM HH:mm', 'fr_FR');
+    final empty = game == null || game.deals.isEmpty;
     return Scaffold(
-      appBar: AppBar(title: const Text('Historique des donnes')),
-      body: SafeArea(
-        child: ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount: game.deals.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            final deal = game.deals[index];
-            return Card(
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor:
-                      _resultColor(deal.result).withValues(alpha: 0.15),
-                  child: Icon(
-                    _resultIcon(deal.result),
-                    color: _resultColor(deal.result),
-                  ),
-                ),
-                title: Text(
-                  '${_contractLabel(deal.contract)} '
-                  '(${_bidLabel(deal.bid)} - ${_capotLabel(deal.capot)})',
-                ),
-                subtitle: Text(
-                  '${dateFormat.format(deal.beginAt)} • '
-                  '${_resultLabel(deal.result)} • '
-                  '${deal.ourPoints} - ${deal.theirPoints}',
-                ),
-              ),
-            );
-          },
+      appBar: AppBar(
+        title: const Text('Historique des donnes'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Retour',
+          onPressed: () => _goBack(context, game),
         ),
       ),
+      body: SafeArea(
+        child: empty
+            ? _EmptyState(hasGame: game != null)
+            : _DealsList(deals: game.deals),
+      ),
+    );
+  }
+
+  void _goBack(BuildContext context, Game? game) {
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
+    if (game != null && game.isOver) {
+      context.go(AppRoutes.gameOver);
+    } else {
+      context.go(AppRoutes.newGame);
+    }
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.hasGame});
+
+  final bool hasGame;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Text(
+          hasGame
+              ? 'Aucune donne enregistrée pour cette partie.'
+              : 'Aucune partie en cours.',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class _DealsList extends StatelessWidget {
+  const _DealsList({required this.deals});
+
+  final List<Deal> deals;
+
+  @override
+  Widget build(BuildContext context) {
+    final dateFormat = DateFormat('EEE dd/MM HH:mm', 'fr_FR');
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: deals.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        final deal = deals[index];
+        return Card(
+          child: ListTile(
+            leading: _DealAvatar(
+              contract: deal.contract,
+              result: deal.result,
+            ),
+            title: Text(
+              '${_contractLabel(deal.contract)} '
+              '(${_bidLabel(deal.bid)} - ${_capotLabel(deal.capot)})',
+            ),
+            subtitle: Text(
+              '${dateFormat.format(deal.beginAt)} • '
+              '${_resultLabel(deal.result)} • '
+              '${deal.ourPoints} - ${deal.theirPoints}',
+            ),
+            trailing: deal.tie
+                ? Tooltip(
+                    message: 'Égalité appliquée (miara miakatra)',
+                    child: Icon(
+                      Icons.compare_arrows,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : null,
+          ),
+        );
+      },
     );
   }
 
@@ -124,30 +166,38 @@ class DealsHistoryScreen extends ConsumerWidget {
         return 'En cours';
     }
   }
+}
 
-  IconData _resultIcon(ResultType? r) {
-    switch (r) {
-      case ResultType.weWin:
-        return Icons.emoji_events;
-      case ResultType.theyWin:
-        return Icons.cancel;
-      case ResultType.split:
-        return Icons.handshake;
-      case ResultType.litigation:
-        return Icons.gavel;
-      case null:
-        return Icons.hourglass_empty;
-    }
+class _DealAvatar extends StatelessWidget {
+  const _DealAvatar({required this.contract, required this.result});
+
+  final ContractType contract;
+  final ResultType? result;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _resultColor(result);
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        shape: BoxShape.circle,
+        border: Border.all(color: color, width: 2),
+      ),
+      alignment: Alignment.center,
+      child: SuitIcon(contract: contract, size: 28),
+    );
   }
 
   Color _resultColor(ResultType? r) {
     switch (r) {
       case ResultType.weWin:
-        return Colors.green;
+        return Colors.green.shade700;
       case ResultType.theyWin:
-        return Colors.red;
+        return Colors.red.shade700;
       case ResultType.split:
-        return Colors.orange;
+        return Colors.orange.shade700;
       case ResultType.litigation:
         return Colors.blueGrey;
       case null:

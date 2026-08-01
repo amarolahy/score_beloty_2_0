@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:score_beloty_2_0/features/game/application/game_providers.dart';
-import 'package:score_beloty_2_0/features/game/domain/deal.dart';
 import 'package:score_beloty_2_0/features/game/domain/game.dart';
 import 'package:score_beloty_2_0/features/game/domain/rules.dart';
 import 'package:score_beloty_2_0/features/game/domain/team.dart';

@@ -8,6 +8,7 @@ import '../../application/game_providers.dart';
 import '../../domain/deal.dart';
 import '../../domain/game.dart';
 import '../../domain/scoring.dart';
+import '../widgets/suit_assets.dart';
 
 class ChooseContractScreen extends ConsumerStatefulWidget {
   const ChooseContractScreen({super.key});
@@ -17,63 +18,28 @@ class ChooseContractScreen extends ConsumerStatefulWidget {
       _ChooseContractScreenState();
 }
 
-class _ContractOption {
-  const _ContractOption({
-    required this.type,
-    required this.label,
-    required this.assetPath,
-    required this.color,
-  });
-
-  final ContractType type;
-  final String label;
-  final String assetPath;
-  final Color color;
-}
-
 class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
   ContractType _contract = ContractType.allTrumps;
   BidType _bid = BidType.pass;
   CapotType _capot = CapotType.no;
 
-  static const List<_ContractOption> _options = [
-    _ContractOption(
-      type: ContractType.allTrumps,
-      label: 'Tout atout',
-      assetPath: 'assets/suits/all_trumps.svg',
-      color: Color(0xFFFFB300),
-    ),
-    _ContractOption(
-      type: ContractType.noTrumps,
-      label: 'Sans atout',
-      assetPath: 'assets/suits/no_trumps.svg',
-      color: Color(0xFF455A64),
-    ),
-    _ContractOption(
-      type: ContractType.spades,
-      label: 'Pique',
-      assetPath: 'assets/suits/spades.svg',
-      color: Colors.black,
-    ),
-    _ContractOption(
-      type: ContractType.hearts,
-      label: 'Cœur',
-      assetPath: 'assets/suits/hearts.svg',
-      color: Color(0xFFD32F2F),
-    ),
-    _ContractOption(
-      type: ContractType.diamonds,
-      label: 'Carreau',
-      assetPath: 'assets/suits/diamonds.svg',
-      color: Color(0xFFD32F2F),
-    ),
-    _ContractOption(
-      type: ContractType.clubs,
-      label: 'Trèfle',
-      assetPath: 'assets/suits/clubs.svg',
-      color: Colors.black,
-    ),
+  static const List<ContractType> _order = [
+    ContractType.allTrumps,
+    ContractType.noTrumps,
+    ContractType.spades,
+    ContractType.hearts,
+    ContractType.diamonds,
+    ContractType.clubs,
   ];
+
+  static const Map<ContractType, String> _labels = {
+    ContractType.allTrumps: 'Tout atout',
+    ContractType.noTrumps: 'Sans atout',
+    ContractType.spades: 'Pique',
+    ContractType.hearts: 'Cœur',
+    ContractType.diamonds: 'Carreau',
+    ContractType.clubs: 'Trèfle',
+  };
 
   Future<void> _startDeal(Game game) async {
     final deal = Deal(
@@ -136,7 +102,8 @@ class _ChooseContractScreenState extends ConsumerState<ChooseContractScreen> {
           Text('Contrat', style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
           _ContractSelector(
-            options: _options,
+            contracts: _order,
+            labels: _labels,
             selected: _contract,
             onChanged: (c) => setState(() => _contract = c),
           ),
@@ -267,12 +234,14 @@ class _ScoreBanner extends StatelessWidget {
 
 class _ContractSelector extends StatelessWidget {
   const _ContractSelector({
-    required this.options,
+    required this.contracts,
+    required this.labels,
     required this.selected,
     required this.onChanged,
   });
 
-  final List<_ContractOption> options;
+  final List<ContractType> contracts;
+  final Map<ContractType, String> labels;
   final ContractType selected;
   final ValueChanged<ContractType> onChanged;
 
@@ -286,13 +255,12 @@ class _ContractSelector extends StatelessWidget {
       crossAxisSpacing: 12,
       childAspectRatio: 1.2,
       children: [
-        for (final option in options)
+        for (final type in contracts)
           _ContractTile(
-            label: option.label,
-            assetPath: option.assetPath,
-            suitColor: option.color,
-            isSelected: selected == option.type,
-            onTap: () => onChanged(option.type),
+            label: labels[type] ?? '',
+            contract: type,
+            isSelected: selected == type,
+            onTap: () => onChanged(type),
           ),
       ],
     );
@@ -302,15 +270,13 @@ class _ContractSelector extends StatelessWidget {
 class _ContractTile extends StatelessWidget {
   const _ContractTile({
     required this.label,
-    required this.assetPath,
-    required this.suitColor,
+    required this.contract,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
-  final String assetPath;
-  final Color suitColor;
+  final ContractType contract;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -319,6 +285,7 @@ class _ContractTile extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final bg = isSelected ? scheme.primaryContainer : scheme.surfaceContainerHighest;
     final fg = isSelected ? scheme.onPrimaryContainer : scheme.onSurface;
+    final suit = SuitAssets.forContract(contract);
     return Material(
       color: bg,
       borderRadius: BorderRadius.circular(14),
@@ -331,10 +298,10 @@ class _ContractTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                assetPath,
+                suit.assetPath,
                 width: 36,
                 height: 36,
-                colorFilter: ColorFilter.mode(suitColor, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(suit.color, BlendMode.srcIn),
               ),
               const SizedBox(height: 6),
               Text(
