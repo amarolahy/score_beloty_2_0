@@ -8,12 +8,29 @@ class HomeShell extends StatelessWidget {
 
   final Widget child;
 
+  static const String logoAsset = 'assets/logos/logo.png';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const _AppDrawer(),
       appBar: AppBar(
-        title: const Text('Score Beloty'),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Semantics(
+              label: 'Logo Score Beloty',
+              child: Image.asset(logoAsset, height: 32),
+            ),
+            const SizedBox(width: 12),
+            const Flexible(
+              child: Text(
+                'Score Beloty',
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
       body: child,
     );
@@ -26,6 +43,7 @@ class _AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
+    final theme = Theme.of(context);
     return NavigationDrawer(
       selectedIndex: _indexFor(location),
       onDestinationSelected: (index) {
@@ -39,23 +57,33 @@ class _AppDrawer extends StatelessWidget {
             context.go(AppRoutes.about);
         }
       },
-      children: const [
-        Padding(
-          padding: EdgeInsets.fromLTRB(28, 24, 28, 12),
-          child: Text(
-            'Score Beloty',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      children: [
+        DrawerHeader(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                HomeShell.logoAsset,
+                height: 56,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Score Beloty',
+                style: theme.textTheme.titleLarge,
+              ),
+            ],
           ),
         ),
-        NavigationDrawerDestination(
+        const NavigationDrawerDestination(
           icon: Icon(Icons.add_circle_outline),
           label: Text('Nouvelle partie'),
         ),
-        NavigationDrawerDestination(
+        const NavigationDrawerDestination(
           icon: Icon(Icons.history),
           label: Text('Historique'),
         ),
-        NavigationDrawerDestination(
+        const NavigationDrawerDestination(
           icon: Icon(Icons.info_outline),
           label: Text('À propos'),
         ),

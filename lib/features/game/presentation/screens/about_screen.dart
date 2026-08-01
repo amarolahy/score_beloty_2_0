@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_shell.dart';
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -14,13 +16,13 @@ class AboutScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
             Center(
-              child: CircleAvatar(
-                radius: 56,
-                backgroundColor: theme.colorScheme.primaryContainer,
-                child: Icon(
-                  Icons.casino,
-                  size: 56,
-                  color: theme.colorScheme.onPrimaryContainer,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Image.asset(
+                  HomeShell.logoAsset,
+                  width: 144,
+                  height: 144,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
