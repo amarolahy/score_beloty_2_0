@@ -19,7 +19,7 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Center(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(36),
                 child: Image.asset(
                   HomeShell.logoAsset,
                   width: 144,

@@ -12,6 +12,10 @@ class HomeShell extends StatelessWidget {
   final Widget child;
 
   static const String logoAsset = 'assets/logos/logo.png';
+  static const double appBarLogoSize = 32;
+  static const double appBarLogoRadius = 8;
+  static const double drawerLogoSize = 56;
+  static const double drawerLogoRadius = 14;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,15 @@ class HomeShell extends StatelessWidget {
           children: [
             Semantics(
               label: l10n.appTitle,
-              child: Image.asset(logoAsset, height: 32),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(appBarLogoRadius),
+                child: Image.asset(
+                  logoAsset,
+                  width: appBarLogoSize,
+                  height: appBarLogoSize,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(width: 12),
             Flexible(
@@ -66,7 +78,16 @@ class _AppDrawer extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(HomeShell.logoAsset, height: 56),
+              ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(HomeShell.drawerLogoRadius),
+                child: Image.asset(
+                  HomeShell.logoAsset,
+                  width: HomeShell.drawerLogoSize,
+                  height: HomeShell.drawerLogoSize,
+                  fit: BoxFit.cover,
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 l10n.appTitle,
